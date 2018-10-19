@@ -1,7 +1,7 @@
 #ifndef FACTORYOPERAND_HPP
 # define FACTORYOPERAND_HPP
 
-#include "Operand.tpp"
+#include "IOperand.hpp"
 #include <string>
 #include <map>
 
@@ -9,15 +9,17 @@ class FactoryOperand {
 
 public:
 
-	FactoryOperand(void);
-	FactoryOperand(FactoryOperand const &src);
 	~FactoryOperand(void);
 
-	FactoryOperand		&operator=(FactoryOperand const &rhs);
 
-	IOperand const		*createOperand( eOperandType type, std::string const & value ) const;
+	IOperand const			*createOperand(eOperandType type, std::string const & value) const;
+
+	static FactoryOperand const	*getInstance(void);
+	static void					deleteInstance(void);
 
 private:
+
+	static FactoryOperand	*_singleton;
 
 	std::map< eOperandType, IOperand const *(FactoryOperand::*)(std::string const &) const > const	_createOperand;
 
@@ -27,6 +29,9 @@ private:
 	IOperand const		*_createFloat( std::string const & value ) const;
 	IOperand const		*_createDouble( std::string const & value ) const;
 
+	FactoryOperand		&operator=(FactoryOperand const &rhs) = delete;
+	FactoryOperand(FactoryOperand const &src) = delete;
+	FactoryOperand(void);
 	static std::map< eOperandType, IOperand const *(FactoryOperand::*)(std::string const &) const > const	_createMapCreateOperand(void);
 	static const bool	_debug;
 };

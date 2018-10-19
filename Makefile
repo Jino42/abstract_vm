@@ -7,7 +7,7 @@ EXE= avm
 #=======COMPILER AND FLAGS======#
 
 CXX= clang++
-CXXFLAGS= -Wall -Wextra -Werror -Wvla
+CXXFLAGS= -Wall -Wextra -Werror -Wvla -std=c++11
 
 #============HEADERS============#
 

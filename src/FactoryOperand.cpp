@@ -1,5 +1,6 @@
 #include <iostream>
 #include "FactoryOperand.hpp"
+#include "Operand.tpp"
 
 FactoryOperand::FactoryOperand(void) :
 _createOperand(FactoryOperand::_createMapCreateOperand())
@@ -9,32 +10,12 @@ _createOperand(FactoryOperand::_createMapCreateOperand())
 	return ;
 }
 
-FactoryOperand::FactoryOperand(FactoryOperand const &src) :
-_createOperand(FactoryOperand::_createMapCreateOperand())
-{
-	if (FactoryOperand::_debug)
-		std::cout << "FactoryOperand:: Copy constructor called." << std::endl;
-	*this = src;
-	return ;
-}
-
 FactoryOperand::~FactoryOperand(void)
 {
 	if (FactoryOperand::_debug)
 		std::cout << "FactoryOperand:: Destructor called." << std::endl;
 	return ;
 }
-
-FactoryOperand		&FactoryOperand::operator=(FactoryOperand const &rhs)
-{
-	if (FactoryOperand::_debug)
-		std::cout << "FactoryOperand:: Assignement called." << std::endl;
-	if (this != &rhs)
-	{
-	}
-	return (*this);
-}
-
 
 IOperand const		*FactoryOperand::createOperand(eOperandType type, std::string const &value) const
 {
@@ -65,6 +46,24 @@ IOperand const		*FactoryOperand::_createDouble(std::string const &value) const
 
 
 //			NO MEMBER			//
+
+FactoryOperand const	*FactoryOperand::getInstance(void)
+{
+	if (!FactoryOperand::_singleton)
+		FactoryOperand::_singleton = new FactoryOperand();
+	return (FactoryOperand::_singleton);
+}
+
+void					FactoryOperand::deleteInstance(void)
+{
+	if (FactoryOperand::_singleton)
+	{
+		delete FactoryOperand::_singleton;
+		FactoryOperand::_singleton = nullptr;
+	}
+}
+
+FactoryOperand	*FactoryOperand::_singleton = nullptr;
 
 std::map< eOperandType, IOperand const *(FactoryOperand::*)(std::string const &) const > const	FactoryOperand::_createMapCreateOperand(void)
 {
