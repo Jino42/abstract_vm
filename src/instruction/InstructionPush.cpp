@@ -24,6 +24,8 @@ InstructionPush::~InstructionPush(void)
 {
 	if (InstructionPush::_debug)
 		std::cout << "InstructionPush:: Destructor called." << std::endl;
+	if (this->_value)
+		delete this->_value;
 	return ;
 }
 

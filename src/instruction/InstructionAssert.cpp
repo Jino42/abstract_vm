@@ -24,6 +24,8 @@ InstructionAssert::~InstructionAssert(void)
 {
 	if (InstructionAssert::_debug)
 		std::cout << "InstructionAssert:: Destructor called." << std::endl;
+	if (this->_value)
+		delete this->_value;
 	return ;
 }
 
