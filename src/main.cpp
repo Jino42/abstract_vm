@@ -6,43 +6,46 @@
 
 int		main(int argc, char **argv)
 {
-	static_cast<void>(argc);
+	{
+		static_cast<void>(argc);
 
-	FactoryOperand const *fo = FactoryOperand::getInstance();
-	IOperand const *a, *b, *c;
+		FactoryOperand const *fo = FactoryOperand::getInstance();
+		IOperand const *a, *b, *c;
 
-	a = fo->createOperand(Int8, "4");
-	b = fo->createOperand(Float, "4.42f");
+		a = fo->createOperand(Int8, "4");
+		b = fo->createOperand(Float, "4.42f");
 
-	c = *a * *b;
+		c = *a * *b;
 
-	std::cout << c->toString() << std::endl;
+		std::cout << c->toString() << std::endl;
 
-	FactoryOperand::deleteInstance();
+		FactoryOperand::deleteInstance();
 
 
-	MutantStack<int> ma;
+		MutantStack<int> ma;
 
-	ma.push(1);
-	ma.push(2);
+		ma.push(1);
+		ma.push(2);
 
-	for (MutantStack<int>::iterator i = ma.begin(); i != ma.end(); i++)
-		std::cout << *i << std::endl;
+		for (MutantStack<int>::iterator i = ma.begin(); i != ma.end(); i++)
+			std::cout << *i << std::endl;
 
-	MutantStack<int> mb;
-	mb = ma;
+		MutantStack<int> mb;
+		mb = ma;
 
-	for (MutantStack<int>::iterator i = mb.begin(); i != mb.end(); i++)
-		std::cout << *i << std::endl;
+		for (MutantStack<int>::iterator i = mb.begin(); i != mb.end(); i++)
+			std::cout << *i << std::endl;
 
-	FactoryInstruction fi;
-	(void)fi;
-	fi.createInstruction(Pop);
-	fi.createInstruction(Dump);
+		FactoryInstruction fi;
+		(void)fi;
+		fi.createInstruction(Pop);
+		fi.createInstruction(Dump);
 
-	AvmCore core(argv[1]);
+		AvmCore core(argv[1]);
 
-	core.printInstruction();
-
+		core.printInstruction();
+		core.execute();
+		core.printStack();
+	}
 	return (0);
 }

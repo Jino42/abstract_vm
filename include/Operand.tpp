@@ -16,6 +16,7 @@ public:
 	eOperandType		getType(void) const;
 
 	IOperand const		*operator*(IOperand const &rhs) const;
+	IOperand const		*operator/(IOperand const &rhs) const;
 
 	std::string const	&toString(void) const;
 
@@ -63,6 +64,17 @@ IOperand const *Operand<T>::operator*(IOperand const &rhs) const
 	double value;
 
 	value = static_cast<double>(this->_value) * static_cast<double>(stof(rhs.toString()));
+	if (this->getType() > rhs.getType())
+		return (FactoryOperand::getInstance()->createOperand(this->getType(), std::to_string(value)));
+	return (FactoryOperand::getInstance()->createOperand(rhs.getType(), std::to_string(value)));
+}
+
+template <typename T>
+IOperand const *Operand<T>::operator/(IOperand const &rhs) const
+{
+	double value;
+
+	value = static_cast<double>(this->_value) / static_cast<double>(stof(rhs.toString()));
 	if (this->getType() > rhs.getType())
 		return (FactoryOperand::getInstance()->createOperand(this->getType(), std::to_string(value)));
 	return (FactoryOperand::getInstance()->createOperand(rhs.getType(), std::to_string(value)));

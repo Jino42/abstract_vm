@@ -9,14 +9,32 @@ class AvmCore {
 
 public:
 
+	class StackTooSmall : public std::exception {
+	public:
+		StackTooSmall(void) throw();
+		StackTooSmall(std::string) throw();
+		virtual const char* what() const throw();
+		~StackTooSmall(void) throw();
+		StackTooSmall(StackTooSmall const &src) throw();
+	private:
+		StackTooSmall &operator=(StackTooSmall const &rhs) throw();
+		std::string			_error;
+	};
+
 	AvmCore(std::string const &path);
 	~AvmCore(void);
+
+	MutantStack< IOperand const * >	&getStack(void);
+
+
 	void	printInstruction(void);
+	void	printStack(void);
+	void	execute(void);
 
 private:
 	AvmParser							_parser;
 	MutantStack< IInstruction const * >	_instruction;
-	MutantStack< IOperand * >			_stack;
+	MutantStack< IOperand const * >			_stack;
 	std::string const					_path;
 
 	AvmCore(void);

@@ -1,5 +1,7 @@
 #include <iostream>
 #include "InstructionPush.hpp"
+#include "AvmCore.hpp"
+#include "FactoryOperand.hpp"
 
 InstructionPush::InstructionPush(IOperand const *operand) :
 _type(Push),
@@ -46,7 +48,7 @@ eInstructionType		InstructionPush::getType(void) const
 
 void					InstructionPush::execute(AvmCore &avm) const
 {
-	static_cast<void>(avm);
+	avm.getStack().push(FactoryOperand::getInstance()->createOperand(this->_value->getType(), this->_value->toString()));
 }
 
 const bool		InstructionPush::_debug = 0;

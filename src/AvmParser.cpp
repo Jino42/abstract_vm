@@ -7,7 +7,8 @@
 #include <iomanip>
 
 AvmParser::AvmParser(MutantStack< IInstruction const * > &instruction) :
-_isValidInstruction(std::regex("([a-z]+)\\s+([a-z0-9]+)\\((-?\\+?[0-9]+.?[0-9]*)\\)")),
+_isValidInstruction(std::regex("([a-z]+)\\s+([a-z0-9]+)\\((-?([0-9]+)|([0-9]+\\.[0-9]+))\\)")),
+
 _instruction(instruction)
 {
 	if (AvmParser::_debug)
@@ -46,13 +47,21 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 
 	std::regex_match(line.c_str(), cm, this->_isValidInstruction, std::regex_constants::match_default);
 
-	/*for (unsigned i = 0; i < cm.size(); i++)
-		std::cout << "[" << cm[i] << "] ";
+
+	/*std::cout << "Begin : ";
+	for (unsigned i = 0; i < cm.size(); i++)
+		std::cout <<  "[" << cm[i] << "] ";
 	std::cout << std::endl;*/
-	if (cm.size() != 4)
+	if (cm.size() != 6)
 		throw(AvmParser::InvalidInstruction(line + " is not a complet Instruction"));
 
 	eoperand = AvmParser::eoperandByString.at(cm[2]);
+	if ((eoperand == Float || eoperand == Double)
+		&& !std::regex_match(std::string(cm[3]), std::regex("([0-9]+\\.[0-9])")))
+		throw(AvmParser::InvalidInstruction(line + " is not a complet Instruction"));
+	if ((eoperand != Float && eoperand != Double)
+		&& !std::regex_match(std::string(cm[3]), std::regex("^([0-9]+)$")))
+		throw(AvmParser::InvalidInstruction(line + " is not a complet Instruction"));
 	return (FactoryOperand::getInstance()->createOperand(eoperand, cm[3]));
 }
 

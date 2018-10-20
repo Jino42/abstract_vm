@@ -19,6 +19,12 @@ AvmCore::~AvmCore(void)
 	return ;
 }
 
+MutantStack< IOperand const * >	&AvmCore::getStack(void)
+{
+	return (this->_stack);
+}
+
+
 void	AvmCore::printInstruction(void)
 {
 	MutantStack<IInstruction const *>::iterator i;
@@ -30,6 +36,38 @@ void	AvmCore::printInstruction(void)
 		i++;
 	}
 }
+void	AvmCore::printStack(void)
+{
+	MutantStack<IOperand const *>::iterator i;
 
+	i = (this->_stack).begin();
+	while (i != (this->_stack).end())
+	{
+		std::cout << (*i)->toString() << std::endl;
+		i++;
+	}
+}
+
+void	AvmCore::execute(void)
+{
+	MutantStack<IInstruction const *>::iterator it;
+
+	it = (this->_instruction).begin();
+	while (it != (this->_instruction).end())
+	{
+		(*it)->execute(*this);
+		it++;
+	}
+}
 
 const bool		AvmCore::_debug = 0;
+
+AvmCore::StackTooSmall::~StackTooSmall(void) throw() {}
+AvmCore::StackTooSmall::StackTooSmall(void) throw() :
+	_error("Trying operate with a too small stack") { }
+AvmCore::StackTooSmall::StackTooSmall(std::string s) throw() :
+	_error(s) { }
+AvmCore::StackTooSmall::StackTooSmall(AvmCore::StackTooSmall const &src) throw()
+	{ this->_error = src._error; }
+const char	*AvmCore::StackTooSmall::what() const throw()
+	{ return (this->_error.c_str()); }
