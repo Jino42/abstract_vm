@@ -7,15 +7,26 @@ EXE= avm
 #=======COMPILER AND FLAGS======#
 
 CXX= clang++
-CXXFLAGS= -Wall -Wextra -Werror -Wvla -std=c++11
+CXXFLAGS= -Wall -Wextra -Werror -Wvla -std=c++11 -MMD
 
 #============HEADERS============#
 
-HEADER= include/
+HEADER_DIR= include/
+HEADER_ALL_DIR= include/ include/instruction
 
-HEADERIN = $(addprefix $(HEADER), $(HEADER_NAME))
+HEADER = $(addprefix $(HEADER_DIR), $(HEADER_FILE))
 
-HEADER_NAME = IOperand.hpp Operand.tpp FactoryOperand.hpp AvmCore.hpp AvmPars.hpp IInstruction.hpp
+HEADER_FILE = IOperand.hpp Operand.tpp FactoryOperand.hpp AvmCore.hpp IInstruction.hpp FactoryInstruction.hpp \
+instruction/InstructionAdd.hpp \
+instruction/InstructionDiv.hpp \
+instruction/InstructionDump.hpp \
+instruction/InstructionExit.hpp \
+instruction/InstructionMod.hpp \
+instruction/InstructionMul.hpp \
+instruction/InstructionPop.hpp \
+instruction/InstructionPrint.hpp \
+instruction/InstructionPush.hpp \
+instruction/InstructionSub.hpp \
 
 #============COLORS=============#
 
@@ -29,7 +40,18 @@ SRC_DIR = ./src/
 
 SRC_FILE= main.cpp \
 FactoryOperand.cpp \
-instruction/osef.cpp
+AvmCore.cpp \
+FactoryInstruction.cpp \
+instruction/InstructionAdd.cpp \
+instruction/InstructionDiv.cpp \
+instruction/InstructionDump.cpp \
+instruction/InstructionExit.cpp \
+instruction/InstructionMod.cpp \
+instruction/InstructionMul.cpp \
+instruction/InstructionPop.cpp \
+instruction/InstructionPrint.cpp \
+instruction/InstructionPush.cpp \
+instruction/InstructionSub.cpp
 
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILE))
 
@@ -37,6 +59,8 @@ SRC = $(addprefix $(SRC_DIR), $(SRC_FILE))
 OBJ_DIR = ./obj/
 OBJ = $(addprefix $(OBJ_DIR), $(OBJ_FILE))
 OBJ_FILE= ${SRC_FILE:.cpp=.o}
+
+DEPENDS= $(OBJ:.o=.d)
 
 #=============RULES=============#
 
@@ -53,8 +77,8 @@ $(OBJ_DIR) :
 	@mkdir $(OBJ_DIR)
 	@mkdir $(OBJ_DIR)/instruction
 
-$(OBJ_DIR)%.o: $(addprefix $(SRC_DIR), %.cpp) Makefile $(HEADERIN)
-	@$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER)
+$(OBJ_DIR)%.o: $(addprefix $(SRC_DIR), %.cpp) Makefile
+	@$(CXX) $(CXXFLAGS) -c $< -o $@ $(addprefix -I, $(HEADER_ALL_DIR))
 	@printf "$(GREEN)+$(EOC)"
 
 clean:
@@ -69,3 +93,5 @@ fclean:
 	@echo "$(RED)<<<----------$(EOC)"
 
 re: fclean all
+
+-include $(DEPENDS)

@@ -1,4 +1,5 @@
 #include "FactoryOperand.hpp"
+#include "FactoryInstruction.hpp"
 #include <iostream>
 #include "MutantStack.tpp"
 
@@ -30,6 +31,10 @@ int		main(void)
 
 	for (MutantStack<int>::iterator i = mb.begin(); i != mb.end(); i++)
 		std::cout << *i << std::endl;
+
+	FactoryInstruction fi;
+	(void)fi;
+	fi.createInstruction(Pop);
 
 	return (0);
 }
