@@ -1,5 +1,6 @@
 #include <iostream>
 #include "InstructionExit.hpp"
+#include "AvmCore.hpp"
 
 InstructionExit::InstructionExit(void) :
 _type(Exit)

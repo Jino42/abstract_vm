@@ -1,5 +1,6 @@
 #include <iostream>
 #include "InstructionDump.hpp"
+#include "AvmCore.hpp"
 
 InstructionDump::InstructionDump(void) :
 _type(Dump)

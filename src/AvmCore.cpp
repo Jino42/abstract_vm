@@ -80,12 +80,16 @@ void	AvmCore::execute(void)
 
 const bool		AvmCore::_debug = 0;
 
-AvmCore::StackTooSmall::~StackTooSmall(void) throw() {}
+AvmCore::StackTooSmall::~StackTooSmall(void) throw(){}
 AvmCore::StackTooSmall::StackTooSmall(void) throw() :
-	_error("Trying operate with a too small stack") { }
+	logic_error(this->_error),
+	_error("Trying operate with a too small stack") {}
 AvmCore::StackTooSmall::StackTooSmall(std::string s) throw() :
+	logic_error(s),
 	_error(s) { }
-AvmCore::StackTooSmall::StackTooSmall(AvmCore::StackTooSmall const &src) throw()
+AvmCore::StackTooSmall::StackTooSmall(AvmCore::StackTooSmall const &src) throw() :
+	logic_error(this->_error),
+	_error(src._error)
 	{ this->_error = src._error; }
 const char	*AvmCore::StackTooSmall::what() const throw()
 	{ return (this->_error.c_str()); }

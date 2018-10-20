@@ -1,5 +1,6 @@
 #include <iostream>
 #include "InstructionPrint.hpp"
+#include "AvmCore.hpp"
 
 InstructionPrint::InstructionPrint(void) :
 _type(Print)

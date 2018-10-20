@@ -1,5 +1,6 @@
 #include <iostream>
 #include "InstructionPop.hpp"
+#include "AvmCore.hpp"
 
 InstructionPop::InstructionPop(void) :
 _type(Pop)
@@ -42,7 +43,13 @@ eInstructionType		InstructionPop::getType(void) const
 
 void					InstructionPop::execute(AvmCore &avm) const
 {
-	static_cast<void>(avm);
+	if (!avm.getStack().size())
+		throw(AvmCore::StackTooSmall("Trying Pop a empty stack"));
+
+	IOperand const *v1 = avm.getStack().top();
+	avm.getStack().pop();
+
+	delete v1;
 }
 
 const bool		InstructionPop::_debug = 0;

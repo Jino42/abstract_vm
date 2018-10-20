@@ -1,5 +1,6 @@
 #include <iostream>
 #include "InstructionAssert.hpp"
+#include "AvmCore.hpp"
 
 InstructionAssert::InstructionAssert(IOperand const *operand) :
 _type(Assert),
