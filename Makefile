@@ -27,6 +27,7 @@ instruction/InstructionPop.hpp \
 instruction/InstructionPrint.hpp \
 instruction/InstructionPush.hpp \
 instruction/InstructionSub.hpp \
+instruction/InstructionAssert.hpp \
 
 #============COLORS=============#
 
@@ -51,7 +52,8 @@ instruction/InstructionMul.cpp \
 instruction/InstructionPop.cpp \
 instruction/InstructionPrint.cpp \
 instruction/InstructionPush.cpp \
-instruction/InstructionSub.cpp
+instruction/InstructionSub.cpp \
+instruction/InstructionAssert.cpp
 
 SRC = $(addprefix $(SRC_DIR), $(SRC_FILE))
 

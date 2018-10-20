@@ -35,6 +35,7 @@ int		main(void)
 	FactoryInstruction fi;
 	(void)fi;
 	fi.createInstruction(Pop);
+	fi.createInstruction(Dump);
 
 	return (0);
 }
