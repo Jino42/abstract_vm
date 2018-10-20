@@ -57,7 +57,7 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 
 	eoperand = AvmParser::eoperandByString.at(cm[2]);
 	if ((eoperand == Float || eoperand == Double)
-		&& !std::regex_match(std::string(cm[3]), std::regex("([0-9]+\\.[0-9])")))
+		&& !std::regex_match(std::string(cm[3]), std::regex("([0-9]+\\.[0-9]+)")))
 		throw(AvmParser::InvalidInstruction(line + " is not a complet Instruction"));
 	if ((eoperand != Float && eoperand != Double)
 		&& !std::regex_match(std::string(cm[3]), std::regex("^([0-9]+)$")))

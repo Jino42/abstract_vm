@@ -1,5 +1,6 @@
 #include <iostream>
 #include "InstructionAdd.hpp"
+#include "AvmCore.hpp"
 
 InstructionAdd::InstructionAdd(void) :
 _type(Add)
@@ -42,7 +43,21 @@ eInstructionType		InstructionAdd::getType(void) const
 
 void					InstructionAdd::execute(AvmCore &avm) const
 {
-	static_cast<void>(avm);
+	if (avm.getStack().size() < 2)
+	{
+		if (!avm.getStack().size())
+			throw(AvmCore::StackTooSmall("Trying Add with a empty stack"));
+		throw(AvmCore::StackTooSmall("Trying Add with a too small stack"));
+	}
+
+	IOperand const *v1 = avm.getStack().top();
+	avm.getStack().pop();
+	IOperand const *v2 = avm.getStack().top();
+	avm.getStack().pop();
+
+	avm.getStack().push(*v2 + *v1);
+	delete v1;
+	delete v2;
 }
 
 const bool		InstructionAdd::_debug = 0;
