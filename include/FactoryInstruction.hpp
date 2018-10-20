@@ -2,6 +2,7 @@
 # define FACTORYINSTRUCTION_HPP
 
 #include <map>
+#include <stdexcept>
 #include "IInstruction.hpp"
 
 class FactoryInstruction {

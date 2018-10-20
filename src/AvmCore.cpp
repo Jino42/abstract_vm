@@ -1,10 +1,14 @@
 #include <iostream>
 #include "AvmCore.hpp"
 
-AvmCore::AvmCore(void)
+
+AvmCore::AvmCore(std::string const &path) :
+_parser(this->_instruction),
+_path(path)
 {
 	if (AvmCore::_debug)
 		std::cout << "AvmCore:: Default constructor called." << std::endl;
+	this->_parser._parse(this->_path);
 	return ;
 }
 
@@ -15,9 +19,16 @@ AvmCore::~AvmCore(void)
 	return ;
 }
 
-void		AvmCore::parse(std::string const &path)
+void	AvmCore::printInstruction(void)
 {
-	(void)path;
+	MutantStack<IInstruction const *>::iterator i;
+
+	i = (this->_instruction).begin();
+	while (i != (this->_instruction).end())
+	{
+		std::cout << AvmParser::stringByEinstruction.at((*i)->getType()) << std::endl;
+		i++;
+	}
 }
 
 

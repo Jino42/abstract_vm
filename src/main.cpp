@@ -2,9 +2,12 @@
 #include "FactoryInstruction.hpp"
 #include <iostream>
 #include "MutantStack.tpp"
+#include "AvmCore.hpp"
 
-int		main(void)
+int		main(int argc, char **argv)
 {
+	static_cast<void>(argc);
+
 	FactoryOperand const *fo = FactoryOperand::getInstance();
 	IOperand const *a, *b, *c;
 
@@ -36,6 +39,10 @@ int		main(void)
 	(void)fi;
 	fi.createInstruction(Pop);
 	fi.createInstruction(Dump);
+
+	AvmCore core(argv[1]);
+
+	core.printInstruction();
 
 	return (0);
 }
