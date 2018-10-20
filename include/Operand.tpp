@@ -3,6 +3,7 @@
 
 #include "IOperand.hpp"
 #include "FactoryOperand.hpp"
+#include <cmath>
 
 template < typename T >
 class Operand : public IOperand {
@@ -17,6 +18,9 @@ public:
 
 	IOperand const		*operator*(IOperand const &rhs) const;
 	IOperand const		*operator/(IOperand const &rhs) const;
+	IOperand const		*operator+(IOperand const &rhs) const;
+	IOperand const		*operator-(IOperand const &rhs) const;
+	IOperand const		*operator%(IOperand const &rhs) const;
 
 	std::string const	&toString(void) const;
 
@@ -27,6 +31,9 @@ private:
 
 	Operand				&operator=(Operand const &rhs);
 	Operand(void);
+
+	static IOperand const *_returnOperand(IOperand const &lhs, IOperand const &rhs, double value);
+
 	static const bool	_debug;
 };
 
@@ -64,20 +71,48 @@ IOperand const *Operand<T>::operator*(IOperand const &rhs) const
 	double value;
 
 	value = static_cast<double>(this->_value) * static_cast<double>(stof(rhs.toString()));
-	if (this->getType() > rhs.getType())
-		return (FactoryOperand::getInstance()->createOperand(this->getType(), std::to_string(value)));
-	return (FactoryOperand::getInstance()->createOperand(rhs.getType(), std::to_string(value)));
+	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
-
 template <typename T>
 IOperand const *Operand<T>::operator/(IOperand const &rhs) const
 {
 	double value;
 
 	value = static_cast<double>(this->_value) / static_cast<double>(stof(rhs.toString()));
-	if (this->getType() > rhs.getType())
-		return (FactoryOperand::getInstance()->createOperand(this->getType(), std::to_string(value)));
+	return (Operand<T>::_returnOperand(*this, rhs, value));
+}
+template <typename T>
+IOperand const *Operand<T>::operator-(IOperand const &rhs) const
+{
+	double value;
+
+	value = static_cast<double>(this->_value) - static_cast<double>(stof(rhs.toString()));
+	return (Operand<T>::_returnOperand(*this, rhs, value));
+}
+template <typename T>
+IOperand const *Operand<T>::operator+(IOperand const &rhs) const
+{
+	double value;
+
+	value = static_cast<double>(this->_value) + static_cast<double>(stof(rhs.toString()));
+	return (Operand<T>::_returnOperand(*this, rhs, value));
+}
+template <typename T>
+IOperand const *Operand<T>::operator%(IOperand const &rhs) const
+{
+	double value;
+
+	value = std::fmod(static_cast<double>(this->_value), static_cast<double>(stof(rhs.toString())));
+	return (Operand<T>::_returnOperand(*this, rhs, value));
+}
+
+template <typename T>
+IOperand const *Operand<T>::_returnOperand(IOperand const &lhs, IOperand const &rhs, double value)
+{
+	if (lhs.getType() > rhs.getType())
+		return (FactoryOperand::getInstance()->createOperand(lhs.getType(), std::to_string(value)));
 	return (FactoryOperand::getInstance()->createOperand(rhs.getType(), std::to_string(value)));
 }
+
 
 #endif

@@ -16,6 +16,24 @@ AvmCore::~AvmCore(void)
 {
 	if (AvmCore::_debug)
 		std::cout << "AvmCore:: Destructor called." << std::endl;
+	MutantStack<IInstruction const *>::iterator it;
+
+	it = (this->_instruction).begin();
+	while (it != (this->_instruction).end())
+	{
+		delete *it;
+		it++;
+	}
+
+	MutantStack<IOperand const *>::iterator i;
+
+	i = (this->_stack).begin();
+	while (i != (this->_stack).end())
+	{
+		delete *i;
+		i++;
+	}
+
 	return ;
 }
 

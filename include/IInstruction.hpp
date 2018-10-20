@@ -11,7 +11,7 @@ public:
 
 	virtual void				execute(AvmCore &avm) const = 0;
 	virtual eInstructionType	getType(void) const = 0;
-
+	virtual ~IInstruction(void) { }
 private:
 
 };
