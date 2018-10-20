@@ -38,34 +38,35 @@ std::string			AvmParser::_getInstructionFromString(std::string const &line)
 	return (instruction);
 }
 
+IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
+{
+	eOperandType		eoperand;
+	std::cmatch			cm;
+
+	std::regex_match(line.c_str(), cm, this->_isValidInstruction, std::regex_constants::match_default);
+
+	if (cm.size() != 4)
+		throw(AvmParser::InvalidInstruction(line + " is not an Instruction"));
+
+	eoperand = AvmParser::eoperandByString.at(cm[2]);
+	return (FactoryOperand::getInstance()->createOperand(eoperand, cm[3]));
+}
+
 IInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::string const &instruction)
 {
 	eInstructionType	einstruction;
-	std::string			arg;
+
 	try
 	{
 		einstruction = AvmParser::einstructionByString.at(instruction);
 		if (einstruction == Assert || einstruction == Push)
-		{
-			//arg = line.substr(instruction.length());
-			//std::cout << "Arg : [" << arg << "]" << std::endl;
-			if (!std::regex_match(line.c_str(), this->_isValidInstruction))
-				throw(AvmParser::InvalidInstruction(instruction + " is not an Instruction"));
-
-			/*std::cmatch cm;
-			std::regex_match(line.c_str(), cm, regexLine, std::regex_constants::match_default);
-			if (!cm.size())
-			std::cout << "Alors ? " << cm.size() << std::endl;
-			for (unsigned int i = 0; i < cm.size(); i++)
-				std::cout << "[" << cm[i] << "] ";*/
-			return (this->_factoryInstruction.createInstruction(einstruction, FactoryOperand::getInstance()->createOperand(Int8, "4")));
-		}
+			return (this->_factoryInstruction.createInstruction(einstruction, this->_parseOperandInstruction(line)));
 		else
 			return (this->_factoryInstruction.createInstruction(einstruction));
 	}
 	catch (std::out_of_range const &e)
 	{
-		throw(AvmParser::InvalidInstruction(instruction + " is not an Instruction"));
+		throw(AvmParser::InvalidInstruction(line + " is not an Instruction"));
 	}
 	catch (std::exception const &e)
 	{
@@ -121,6 +122,14 @@ std::map<eInstructionType, std::string>			AvmParser::stringByEinstruction = {
 	{Assert, "assert"},
 	{Push, "push"},
 	{Exit, "exit"}
+};
+
+std::map<std::string, eOperandType>			AvmParser::eoperandByString = {
+	{"int8", Int8},
+	{"int16", Int16},
+	{"int32", Int32},
+	{"float", Float},
+	{"double", Double},
 };
 
 AvmParser::InvalidInstruction::~InvalidInstruction(void) throw() {}

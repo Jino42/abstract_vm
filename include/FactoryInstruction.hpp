@@ -40,7 +40,7 @@ private:
 	FactoryInstruction(FactoryInstruction const &src);
 	FactoryInstruction		&operator=(FactoryInstruction const &rhs);
 
-	static std::map< eInstructionType, functionCreate > const	_createMapInstruction(void);
+	static std::map< eInstructionType, functionCreate > const		_createMapInstruction(void);
 	static std::map< eInstructionType, functionCreateArg > const	_createMapInstructionArg(void);
 	static const bool	_debug;
 };

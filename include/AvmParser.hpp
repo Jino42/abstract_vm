@@ -28,11 +28,14 @@ public:
 
 	void					_parse(std::string const &);
 	IInstruction const		*_parseInstruction(std::string const &line, std::string const &instruction);
+	IOperand const			*_parseOperandInstruction(std::string const &line);
 	static bool				_isEmptyString(std::string const &line);
 	static std::string		_getInstructionFromString(std::string const &line);
 
 	static std::map<std::string, eInstructionType>			einstructionByString;
 	static std::map<eInstructionType, std::string>			stringByEinstruction;
+	static std::map<std::string, eOperandType>				eoperandByString;
+
 private:
 	std::regex							_isValidInstruction;
 	MutantStack< IInstruction const * >	&_instruction;
