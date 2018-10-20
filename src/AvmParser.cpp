@@ -4,9 +4,10 @@
 #include <sstream>
 #include <stdexcept>
 #include "FactoryOperand.hpp"
+#include <iomanip>
 
 AvmParser::AvmParser(MutantStack< IInstruction const * > &instruction) :
-_isValidInstruction(std::regex("([a-z]+)\\s+([a-z0-9]+)\\((-?\\+?[0-9]+.?[0-9]+)\\)")),
+_isValidInstruction(std::regex("([a-z]+)\\s+([a-z0-9]+)\\((-?\\+?[0-9]+.?[0-9]*)\\)")),
 _instruction(instruction)
 {
 	if (AvmParser::_debug)
@@ -23,7 +24,7 @@ AvmParser::~AvmParser(void)
 
 bool				AvmParser::_isEmptyString(std::string const &line)
 {
-	if (line.empty() || regex_match(line.c_str(), std::regex("^\\s*;")))
+	if (line.empty() || std::regex_match(line.c_str(), std::regex("^(\\s*;).*")))
 		return (true);
 	return (false);
 }
@@ -45,8 +46,11 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 
 	std::regex_match(line.c_str(), cm, this->_isValidInstruction, std::regex_constants::match_default);
 
+	/*for (unsigned i = 0; i < cm.size(); i++)
+		std::cout << "[" << cm[i] << "] ";
+	std::cout << std::endl;*/
 	if (cm.size() != 4)
-		throw(AvmParser::InvalidInstruction(line + " is not an Instruction"));
+		throw(AvmParser::InvalidInstruction(line + " is not a complet Instruction"));
 
 	eoperand = AvmParser::eoperandByString.at(cm[2]);
 	return (FactoryOperand::getInstance()->createOperand(eoperand, cm[3]));
@@ -85,7 +89,7 @@ void				AvmParser::_parse(std::string const &path)
 	{
 		if (!AvmParser::_isEmptyString(line))
 		{
-			std::cout << line << "Instruction : [" << AvmParser::_getInstructionFromString(line) << "]" << std::endl;
+			std::cout << std::setw(20) << line << " : Instruction : [" << AvmParser::_getInstructionFromString(line) << "]" << std::endl;
 			try {
 				this->_instruction.push(this->_parseInstruction(line, AvmParser::_getInstructionFromString(line)));
 			} catch (std::exception const &e) {
@@ -103,7 +107,7 @@ std::map<std::string, eInstructionType>			AvmParser::einstructionByString = {
 	{"add", Add},
 	{"sub", Sub},
 	{"mul", Mul},
-	{"dif", Div},
+	{"div", Div},
 	{"mod", Mod},
 	{"print", Print},
 	{"assert", Assert},
@@ -116,7 +120,7 @@ std::map<eInstructionType, std::string>			AvmParser::stringByEinstruction = {
 	{Add, "add"},
 	{Sub, "sub"},
 	{Mul, "mul"},
-	{Div, "dif"},
+	{Div, "div"},
 	{Mod, "mod"},
 	{Print, "print"},
 	{Assert, "assert"},
