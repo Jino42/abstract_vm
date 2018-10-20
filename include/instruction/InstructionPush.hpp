@@ -2,13 +2,14 @@
 # define INSTRUCTIONPUSH_HPP
 
 #include "IInstruction.hpp"
+#include "IOperand.hpp"
 #include <string>
 
 class InstructionPush : public IInstruction {
 
 public:
 
-	InstructionPush(std::string const &);
+	InstructionPush(IOperand const *);
 	~InstructionPush(void);
 
 	InstructionPush(InstructionPush const &src);
@@ -18,7 +19,7 @@ public:
 	eInstructionType	getType(void) const;
 private:
 	eInstructionType const	_type;
-	std::string const		_value;
+	IOperand const			*_value;
 
 	InstructionPush(void);
 

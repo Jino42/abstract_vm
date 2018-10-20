@@ -2,10 +2,11 @@
 #include "AvmParser.hpp"
 #include <fstream>
 #include <sstream>
-#include <regex>
 #include <stdexcept>
+#include "FactoryOperand.hpp"
 
 AvmParser::AvmParser(MutantStack< IInstruction const * > &instruction) :
+_isValidInstruction(std::regex("([a-z]+)\\s+([a-z0-9]+)\\((-?\\+?[0-9]+.?[0-9]+)\\)")),
 _instruction(instruction)
 {
 	if (AvmParser::_debug)
@@ -39,13 +40,26 @@ std::string			AvmParser::_getInstructionFromString(std::string const &line)
 
 IInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::string const &instruction)
 {
-	eInstructionType einstruction;
-	(void)line;
+	eInstructionType	einstruction;
+	std::string			arg;
 	try
 	{
 		einstruction = AvmParser::einstructionByString.at(instruction);
 		if (einstruction == Assert || einstruction == Push)
-			return (this->_factoryInstruction.createInstruction(einstruction, "LOL"));
+		{
+			//arg = line.substr(instruction.length());
+			//std::cout << "Arg : [" << arg << "]" << std::endl;
+			if (!std::regex_match(line.c_str(), this->_isValidInstruction))
+				throw(AvmParser::InvalidInstruction(instruction + " is not an Instruction"));
+
+			/*std::cmatch cm;
+			std::regex_match(line.c_str(), cm, regexLine, std::regex_constants::match_default);
+			if (!cm.size())
+			std::cout << "Alors ? " << cm.size() << std::endl;
+			for (unsigned int i = 0; i < cm.size(); i++)
+				std::cout << "[" << cm[i] << "] ";*/
+			return (this->_factoryInstruction.createInstruction(einstruction, FactoryOperand::getInstance()->createOperand(Int8, "4")));
+		}
 		else
 			return (this->_factoryInstruction.createInstruction(einstruction));
 	}

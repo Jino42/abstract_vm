@@ -2,13 +2,14 @@
 # define INSTRUCTIONASSERT_HPP
 
 #include "IInstruction.hpp"
+#include "IOperand.hpp"
 #include <string>
 
 class InstructionAssert : public IInstruction {
 
 public:
 
-	InstructionAssert(std::string const &);
+	InstructionAssert(IOperand const *);
 	~InstructionAssert(void);
 
 	InstructionAssert(InstructionAssert const &src);
@@ -18,7 +19,7 @@ public:
 	eInstructionType	getType(void) const;
 private:
 	eInstructionType const	_type;
-	std::string const		_value;
+	IOperand const			*_value;
 
 	InstructionAssert(void);
 

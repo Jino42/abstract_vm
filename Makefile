@@ -16,7 +16,13 @@ HEADER_ALL_DIR= include/ include/instruction
 
 HEADER = $(addprefix $(HEADER_DIR), $(HEADER_FILE))
 
-HEADER_FILE = IOperand.hpp Operand.tpp FactoryOperand.hpp AvmCore.hpp IInstruction.hpp FactoryInstruction.hpp \
+HEADER_FILE = IOperand.hpp \
+Operand.tpp \
+FactoryOperand.hpp \
+AvmCore.hpp \
+IInstruction.hpp \
+FactoryInstruction.hpp \
+AvmParser.hpp \
 instruction/InstructionAdd.hpp \
 instruction/InstructionDiv.hpp \
 instruction/InstructionDump.hpp \
@@ -42,6 +48,7 @@ SRC_DIR = ./src/
 SRC_FILE= main.cpp \
 FactoryOperand.cpp \
 AvmCore.cpp \
+AvmParser.cpp \
 FactoryInstruction.cpp \
 instruction/InstructionAdd.cpp \
 instruction/InstructionDiv.cpp \

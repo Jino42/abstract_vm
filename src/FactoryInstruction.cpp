@@ -28,22 +28,22 @@ FactoryInstruction::~FactoryInstruction(void)
 	return ;
 }
 
-IInstruction const		*FactoryInstruction::createInstruction(eInstructionType type, std::string const &value) const
+IInstruction const		*FactoryInstruction::createInstruction(eInstructionType type, IOperand const *operand) const
 {
-	return((this->*_createInstructionArg.at(type))(value));
+	return((this->*_createInstructionArg.at(type))(operand));
 }
 IInstruction const		*FactoryInstruction::createInstruction(eInstructionType type) const
 {
 	return((this->*_createInstruction.at(type))());
 }
 
-IInstruction const		*FactoryInstruction::_createPush(std::string const &value) const
+IInstruction const		*FactoryInstruction::_createPush(IOperand const *operand) const
 {
-	return (new InstructionPush(value));
+	return (new InstructionPush(operand));
 }
-IInstruction const		*FactoryInstruction::_createAssert(std::string const &value) const
+IInstruction const		*FactoryInstruction::_createAssert(IOperand const *operand) const
 {
-	return (new InstructionAssert(value));
+	return (new InstructionAssert(operand));
 }
 
 std::map< eInstructionType, FactoryInstruction::functionCreateArg > const	FactoryInstruction::_createMapInstructionArg(void)

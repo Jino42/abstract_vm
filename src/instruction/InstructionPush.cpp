@@ -1,9 +1,9 @@
 #include <iostream>
 #include "InstructionPush.hpp"
 
-InstructionPush::InstructionPush(std::string const &value) :
+InstructionPush::InstructionPush(IOperand const *operand) :
 _type(Push),
-_value(value)
+_value(operand)
 {
 	if (InstructionPush::_debug)
 		std::cout << "InstructionPush:: Default constructor called." << std::endl;

@@ -4,26 +4,27 @@
 #include <map>
 #include <stdexcept>
 #include "IInstruction.hpp"
+#include "IOperand.hpp"
 
 class FactoryInstruction {
 
 public:
 
 	typedef IInstruction const *(FactoryInstruction::*functionCreate)(void) const;
-	typedef IInstruction const *(FactoryInstruction::*functionCreateArg)(std::string const &) const;
+	typedef IInstruction const *(FactoryInstruction::*functionCreateArg)(IOperand const *) const;
 
 	FactoryInstruction(void);
 	~FactoryInstruction(void);
 
-	IInstruction const		*createInstruction(eInstructionType type, std::string const &value) const;
+	IInstruction const		*createInstruction(eInstructionType type, IOperand const *) const;
 	IInstruction const		*createInstruction(eInstructionType type) const;
 
 private:
 	std::map<eInstructionType, functionCreate> const		_createInstruction;
 	std::map<eInstructionType, functionCreateArg> const		_createInstructionArg;
 
-	IInstruction const		*_createPush(std::string const &) const;
-	IInstruction const		*_createAssert(std::string const &) const;
+	IInstruction const		*_createPush(IOperand const *) const;
+	IInstruction const		*_createAssert(IOperand const *) const;
 
 
 	IInstruction const		*_createPop(void) const;

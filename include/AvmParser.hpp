@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include "MutantStack.tpp"
+#include <regex>
 
 class AvmParser {
 
@@ -33,6 +34,7 @@ public:
 	static std::map<std::string, eInstructionType>			einstructionByString;
 	static std::map<eInstructionType, std::string>			stringByEinstruction;
 private:
+	std::regex							_isValidInstruction;
 	MutantStack< IInstruction const * >	&_instruction;
 	FactoryInstruction const			_factoryInstruction;
 

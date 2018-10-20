@@ -1,9 +1,9 @@
 #include <iostream>
 #include "InstructionAssert.hpp"
 
-InstructionAssert::InstructionAssert(std::string const &value) :
+InstructionAssert::InstructionAssert(IOperand const *operand) :
 _type(Assert),
-_value(value)
+_value(operand)
 {
 	if (InstructionAssert::_debug)
 		std::cout << "InstructionAssert:: Default constructor called." << std::endl;
