@@ -15,7 +15,7 @@ HEADER= include/
 
 HEADERIN = $(addprefix $(HEADER), $(HEADER_NAME))
 
-HEADER_NAME = IOperand.hpp Operand.tpp FactoryOperand.hpp
+HEADER_NAME = IOperand.hpp Operand.tpp FactoryOperand.hpp AvmCore.hpp AvmPars.hpp IInstruction.hpp
 
 #============COLORS=============#
 
@@ -25,33 +25,44 @@ EOC=\033[0m
 
 #==============SRC=============#
 
-SRCIN = $(addprefix ./src/, $(SRC))
+SRC_DIR = ./src/
 
-SRC= main.cpp \
-FactoryOperand.cpp
+SRC_FILE= main.cpp \
+FactoryOperand.cpp \
+instruction/osef.cpp
 
-OBJ= ${SRCIN:.cpp=.o}
+SRC = $(addprefix $(SRC_DIR), $(SRC_FILE))
+
+
+OBJ_DIR = ./obj/
+OBJ = $(addprefix $(OBJ_DIR), $(OBJ_FILE))
+OBJ_FILE= ${SRC_FILE:.cpp=.o}
 
 #=============RULES=============#
 
 all: $(EXE)
 
-%.o: %.cpp Makefile $(HEADERIN)
-	@$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER)
-	@printf "$(GREEN)+$(EOC)"
 
-$(EXE): $(OBJ)
+$(EXE): $(OBJ_DIR) $(OBJ)
 	@echo "\t$(EXE)'s objects compiled"
-	@$(CXX) $(CXXFLAGS) $^ -o $(EXE)
+	@$(CXX) $(CXXFLAGS) $(OBJ) -o $(EXE)
 	@echo "executable $(GREEN)$(EXE)$(EOC) created"
 	@echo "$(GREEN)---------->>>$(EOC)"
 
+$(OBJ_DIR) :
+	@mkdir $(OBJ_DIR)
+	@mkdir $(OBJ_DIR)/instruction
+
+$(OBJ_DIR)%.o: $(addprefix $(SRC_DIR), %.cpp) Makefile $(HEADERIN)
+	@$(CXX) $(CXXFLAGS) -c $< -o $@ -I $(HEADER)
+	@printf "$(GREEN)+$(EOC)"
+
 clean:
-	@rm -f $(OBJ)
+	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)[x]$(EOC) $(EXE)'s objects cleaned"
 
 fclean:
-	@rm -f $(OBJ)
+	@rm -rf $(OBJ_DIR)
 	@echo "$(RED)[x]$(EOC) $(EXE)'s objects cleaned"
 	@rm -f $(EXE)
 	@echo "executable $(RED)$(EXE)$(EOC) removed"
