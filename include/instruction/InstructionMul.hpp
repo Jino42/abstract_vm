@@ -1,22 +1,20 @@
 #ifndef INSTRUCTIONMUL_HPP
 # define INSTRUCTIONMUL_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 
-class InstructionMul : public IInstruction {
+class InstructionMul : public AInstruction {
 
 public:
 
 	InstructionMul(void);
 	~InstructionMul(void);
 
+	void				execute(AvmCore &avm) const;
+private:
+
 	InstructionMul(InstructionMul const &src);
 	InstructionMul		&operator=(InstructionMul const &rhs);
-
-	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
-private:
-	eInstructionType const	_type;
 
 	static const bool	_debug;
 };

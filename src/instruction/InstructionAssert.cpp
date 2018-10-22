@@ -3,22 +3,12 @@
 #include "AvmCore.hpp"
 #include "InstructionException.hpp"
 
-InstructionAssert::InstructionAssert(IOperand const *operand) :
-_type(Assert),
+InstructionAssert::InstructionAssert(std::string const &instruction, IOperand const *operand) :
+AInstruction(instruction, Assert),
 _value(operand)
 {
 	if (InstructionAssert::_debug)
 		std::cout << "InstructionAssert:: Default constructor called." << std::endl;
-	return ;
-}
-
-InstructionAssert::InstructionAssert(InstructionAssert const &src) :
-_type(Assert),
-_value(src._value)
-{
-	if (InstructionAssert::_debug)
-		std::cout << "InstructionAssert:: Copy constructor called." << std::endl;
-	*this = src;
 	return ;
 }
 
@@ -29,21 +19,6 @@ InstructionAssert::~InstructionAssert(void)
 	if (this->_value)
 		delete this->_value;
 	return ;
-}
-
-InstructionAssert		&InstructionAssert::operator=(InstructionAssert const &rhs)
-{
-	if (InstructionAssert::_debug)
-		std::cout << "InstructionAssert:: Assignement called." << std::endl;
-	if (this != &rhs)
-	{
-	}
-	return (*this);
-}
-
-eInstructionType		InstructionAssert::getType(void) const
-{
-	return (this->_type);
 }
 
 void					InstructionAssert::execute(AvmCore &avm) const

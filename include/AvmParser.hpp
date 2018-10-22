@@ -23,12 +23,12 @@ public:
 		std::string			_error;
 	};
 
-	AvmParser(MutantStack< IInstruction const * > &instruction);
+	AvmParser(MutantStack< AInstruction const * > &instruction);
 	~AvmParser(void);
 
 	void					_parse(std::string const &);
 	void					_parse(void);
-	IInstruction const		*_parseInstruction(std::string const &line, std::string const &instruction);
+	AInstruction const		*_parseInstruction(std::string const &line, std::string const &instruction);
 	IOperand const			*_parseOperandInstruction(std::string const &line);
 	static bool				_isEmptyString(std::string const &line);
 	static std::string		_getInstructionFromString(std::string const &line);
@@ -39,7 +39,7 @@ public:
 
 private:
 	std::regex							_isValidInstruction;
-	MutantStack< IInstruction const * >	&_instruction;
+	MutantStack< AInstruction const * >	&_instruction;
 	FactoryInstruction const			_factoryInstruction;
 
 	AvmParser(void);

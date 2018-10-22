@@ -1,22 +1,20 @@
 #ifndef INSTRUCTIONPRINT_HPP
 # define INSTRUCTIONPRINT_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 
-class InstructionPrint : public IInstruction {
+class InstructionPrint : public AInstruction {
 
 public:
 
 	InstructionPrint(void);
 	~InstructionPrint(void);
 
+	void				execute(AvmCore &avm) const;
+private:
+
 	InstructionPrint(InstructionPrint const &src);
 	InstructionPrint		&operator=(InstructionPrint const &rhs);
-
-	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
-private:
-	eInstructionType const	_type;
 
 	static const bool	_debug;
 };

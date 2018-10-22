@@ -7,7 +7,7 @@
 #include <iomanip>
 #include "InstructionException.hpp"
 
-AvmParser::AvmParser(MutantStack< IInstruction const * > &instruction) :
+AvmParser::AvmParser(MutantStack< AInstruction const * > &instruction) :
 _isValidInstruction(std::regex("([a-z]+)\\s+([a-z0-9]+)\\((-?([0-9]+)|([0-9]+\\.[0-9]+))\\)")),
 
 _instruction(instruction)
@@ -54,14 +54,16 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 	instruction = line.substr(0, found + 1);
 
 	if (!AvmParser::_isEmptyString(line.substr(found + 1)))
-		throw(AvmParser::InvalidInstruction(line.substr(found) + " -> after instruction"));
+		throw(AvmParser::InvalidInstruction(line.substr(found + 1) + " -> after instruction"));
 
 	std::regex_match(instruction.c_str(), cm, this->_isValidInstruction, std::regex_constants::match_default);
 
-	/*std::cout << "Begin : ";
+	/*
+	std::cout << "Begin : ";
 	for (unsigned i = 0; i < cm.size(); i++)
 		std::cout <<  "[" << cm[i] << "] ";
-	std::cout << std::endl;*/
+	std::cout << std::endl;
+	*/
 
 	if (cm.size() != 6)
 		throw(AvmParser::InvalidInstruction(instruction + " -> is not a complet Instruction"));
@@ -76,7 +78,7 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 	return (FactoryOperand::getInstance()->createOperand(eoperand, cm[3], FactoryOperand::getStringPrecision(cm[3])));
 }
 
-IInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::string const &instruction)
+AInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::string const &instruction)
 {
 	eInstructionType	einstruction;
 
@@ -84,13 +86,18 @@ IInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::s
 	{
 		einstruction = AvmParser::einstructionByString.at(instruction);
 		if (einstruction == Assert || einstruction == Push)
-			return (this->_factoryInstruction.createInstruction(einstruction, this->_parseOperandInstruction(line)));
+		{
+			std::size_t			found;
+			if ((found = line.find(")")) == std::string::npos)
+				throw(AvmParser::InvalidInstruction(line + " -> is not a complet Instruction"));
+			return (this->_factoryInstruction.createInstruction(line.substr(found + 1), einstruction, this->_parseOperandInstruction(line)));
+		}
 		else
 			return (this->_factoryInstruction.createInstruction(einstruction));
 	}
 	catch (std::out_of_range const &e)
 	{
-		throw(AvmParser::InvalidInstruction(line + "-> is not an Instruction"));
+		throw(AvmParser::InvalidInstruction(line + " -> is not an Instruction"));
 	}
 	catch (std::exception const &e)
 	{
@@ -109,7 +116,6 @@ void				AvmParser::_parse(std::string const &path)
 	{
 		if (!AvmParser::_isEmptyString(line))
 		{
-			std::cout << std::setw(20) << line << " : Instruction : [" << AvmParser::_getInstructionFromString(line) << "]" << std::endl;
 			try
 			{
 				this->_instruction.push(this->_parseInstruction(line, AvmParser::_getInstructionFromString(line)));
@@ -138,7 +144,6 @@ void				AvmParser::_parse(void)
 	{
 		if (!AvmParser::_isEmptyString(line))
 		{
-			std::cout << std::setw(20) << line << " : Instruction : [" << AvmParser::_getInstructionFromString(line) << "]" << std::endl;
 			try
 			{
 				this->_instruction.push(this->_parseInstruction(line, AvmParser::_getInstructionFromString(line)));

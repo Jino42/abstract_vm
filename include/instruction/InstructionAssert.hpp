@@ -1,26 +1,23 @@
 #ifndef INSTRUCTIONASSERT_HPP
 # define INSTRUCTIONASSERT_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 #include "IOperand.hpp"
 #include <string>
 
-class InstructionAssert : public IInstruction {
+class InstructionAssert : public AInstruction {
 
 public:
 
-	InstructionAssert(IOperand const *);
+	InstructionAssert(std::string const &, IOperand const *);
 	~InstructionAssert(void);
+
+	void				execute(AvmCore &avm) const;
+private:
+	IOperand const			*_value;
 
 	InstructionAssert(InstructionAssert const &src);
 	InstructionAssert		&operator=(InstructionAssert const &rhs);
-
-	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
-private:
-	eInstructionType const	_type;
-	IOperand const			*_value;
-
 	InstructionAssert(void);
 
 	static const bool	_debug;

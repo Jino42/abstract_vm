@@ -28,22 +28,22 @@ FactoryInstruction::~FactoryInstruction(void)
 	return ;
 }
 
-IInstruction const		*FactoryInstruction::createInstruction(eInstructionType type, IOperand const *operand) const
+AInstruction const		*FactoryInstruction::createInstruction(std::string const &instruction, eInstructionType type, IOperand const *operand) const
 {
-	return((this->*_createInstructionArg.at(type))(operand));
+	return((this->*_createInstructionArg.at(type))(instruction, operand));
 }
-IInstruction const		*FactoryInstruction::createInstruction(eInstructionType type) const
+AInstruction const		*FactoryInstruction::createInstruction(eInstructionType type) const
 {
 	return((this->*_createInstruction.at(type))());
 }
 
-IInstruction const		*FactoryInstruction::_createPush(IOperand const *operand) const
+AInstruction const		*FactoryInstruction::_createPush(std::string const &instruction, IOperand const *operand) const
 {
-	return (new InstructionPush(operand));
+	return (new InstructionPush(instruction, operand));
 }
-IInstruction const		*FactoryInstruction::_createAssert(IOperand const *operand) const
+AInstruction const		*FactoryInstruction::_createAssert(std::string const &instruction, IOperand const *operand) const
 {
-	return (new InstructionAssert(operand));
+	return (new InstructionAssert(instruction, operand));
 }
 
 std::map< eInstructionType, FactoryInstruction::functionCreateArg > const	FactoryInstruction::_createMapInstructionArg(void)
@@ -56,39 +56,39 @@ std::map< eInstructionType, FactoryInstruction::functionCreateArg > const	Factor
 }
 
 
-IInstruction const		*FactoryInstruction::_createPop(void) const
+AInstruction const		*FactoryInstruction::_createPop(void) const
 {
 	return (new InstructionPop());
 }
-IInstruction const		*FactoryInstruction::_createDump(void) const
+AInstruction const		*FactoryInstruction::_createDump(void) const
 {
 	return (new InstructionDump());
 }
-IInstruction const		*FactoryInstruction::_createAdd(void) const
+AInstruction const		*FactoryInstruction::_createAdd(void) const
 {
 	return (new InstructionAdd());
 }
-IInstruction const		*FactoryInstruction::_createSub(void) const
+AInstruction const		*FactoryInstruction::_createSub(void) const
 {
 	return (new InstructionSub());
 }
-IInstruction const		*FactoryInstruction::_createMul(void) const
+AInstruction const		*FactoryInstruction::_createMul(void) const
 {
 	return (new InstructionMul());
 }
-IInstruction const		*FactoryInstruction::_createDiv(void) const
+AInstruction const		*FactoryInstruction::_createDiv(void) const
 {
 	return (new InstructionDiv());
 }
-IInstruction const		*FactoryInstruction::_createMod(void) const
+AInstruction const		*FactoryInstruction::_createMod(void) const
 {
 	return (new InstructionMod());
 }
-IInstruction const		*FactoryInstruction::_createPrint(void) const
+AInstruction const		*FactoryInstruction::_createPrint(void) const
 {
 	return (new InstructionPrint());
 }
-IInstruction const		*FactoryInstruction::_createExit(void) const
+AInstruction const		*FactoryInstruction::_createExit(void) const
 {
 	return (new InstructionExit());
 }

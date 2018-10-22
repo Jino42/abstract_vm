@@ -1,22 +1,20 @@
 #ifndef INSTRUCTIONDUMP_HPP
 # define INSTRUCTIONDUMP_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 
-class InstructionDump : public IInstruction {
+class InstructionDump : public AInstruction {
 
 public:
 
 	InstructionDump(void);
 	~InstructionDump(void);
 
+	void				execute(AvmCore &avm) const;
+private:
+
 	InstructionDump(InstructionDump const &src);
 	InstructionDump		&operator=(InstructionDump const &rhs);
-
-	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
-private:
-	eInstructionType const	_type;
 
 	static const bool	_debug;
 };

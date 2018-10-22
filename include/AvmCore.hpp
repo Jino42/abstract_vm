@@ -4,6 +4,7 @@
 #include "MutantStack.tpp"
 #include "IOperand.hpp"
 #include "AvmParser.hpp"
+#include "Ncurses.hpp"
 
 class AvmCore {
 
@@ -21,27 +22,30 @@ public:
 		std::string			_error;
 	};
 
-	AvmCore(std::string const &path);
-	AvmCore(void);
+	AvmCore(std::string const &path, Ncurses *ncurses);
+	AvmCore(Ncurses *ncurses);
 	~AvmCore(void);
 
 	MutantStack< IOperand const * >	&getStack(void);
 
 	void	setExit(bool);
 
-	void	printInstruction(void);
-	void	printStack(void);
-	void	execute(void);
+	static void	_printError(std::string const &str);
+	void		printInstruction(void);
+	void		printStack(void);
+	void		execute(void);
 
 private:
+	Ncurses								*_ncurses;
 	bool								_exit;
 	AvmParser							_parser;
-	MutantStack< IInstruction const * >	_instruction;
+	MutantStack< AInstruction const * >	_instruction;
 	MutantStack< IOperand const * >			_stack;
 	std::string const					_path;
 
 	AvmCore(AvmCore const &src);
 	AvmCore		&operator=(AvmCore const &rhs);
+	AvmCore(void);
 
 	static const bool	_debug;
 };

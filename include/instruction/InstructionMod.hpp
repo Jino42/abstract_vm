@@ -1,22 +1,20 @@
 #ifndef INSTRUCTIONMOD_HPP
 # define INSTRUCTIONMOD_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 
-class InstructionMod : public IInstruction {
+class InstructionMod : public AInstruction {
 
 public:
 
 	InstructionMod(void);
 	~InstructionMod(void);
 
+	void				execute(AvmCore &avm) const;
+private:
+
 	InstructionMod(InstructionMod const &src);
 	InstructionMod		&operator=(InstructionMod const &rhs);
-
-	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
-private:
-	eInstructionType const	_type;
 
 	static const bool	_debug;
 };

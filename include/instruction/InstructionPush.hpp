@@ -1,27 +1,24 @@
 #ifndef INSTRUCTIONPUSH_HPP
 # define INSTRUCTIONPUSH_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 #include "IOperand.hpp"
 #include <string>
 
-class InstructionPush : public IInstruction {
+class InstructionPush : public AInstruction {
 
 public:
 
-	InstructionPush(IOperand const *);
+	InstructionPush(std::string const &, IOperand const *);
 	~InstructionPush(void);
 
-	InstructionPush(InstructionPush const &src);
-	InstructionPush		&operator=(InstructionPush const &rhs);
-
 	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
 private:
-	eInstructionType const	_type;
 	IOperand const			*_value;
 
 	InstructionPush(void);
+	InstructionPush(InstructionPush const &src);
+	InstructionPush		&operator=(InstructionPush const &rhs);
 
 	static const bool	_debug;
 };

@@ -1,22 +1,19 @@
 #ifndef INSTRUCTIONSUB_HPP
 # define INSTRUCTIONSUB_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 
-class InstructionSub : public IInstruction {
+class InstructionSub : public AInstruction {
 
 public:
 
 	InstructionSub(void);
 	~InstructionSub(void);
 
+	void				execute(AvmCore &avm) const;
+private:
 	InstructionSub(InstructionSub const &src);
 	InstructionSub		&operator=(InstructionSub const &rhs);
-
-	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
-private:
-	eInstructionType const	_type;
 
 	static const bool	_debug;
 };

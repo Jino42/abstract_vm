@@ -3,39 +3,39 @@
 
 #include <map>
 #include <stdexcept>
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 #include "IOperand.hpp"
 
 class FactoryInstruction {
 
 public:
 
-	typedef IInstruction const *(FactoryInstruction::*functionCreate)(void) const;
-	typedef IInstruction const *(FactoryInstruction::*functionCreateArg)(IOperand const *) const;
+	typedef AInstruction const *(FactoryInstruction::*functionCreateArg)(std::string const &, IOperand const *) const;
+	typedef AInstruction const *(FactoryInstruction::*functionCreate)(void) const;
 
 	FactoryInstruction(void);
 	~FactoryInstruction(void);
 
-	IInstruction const		*createInstruction(eInstructionType type, IOperand const *) const;
-	IInstruction const		*createInstruction(eInstructionType type) const;
+	AInstruction const		*createInstruction(std::string const &, eInstructionType type, IOperand const *) const;
+	AInstruction const		*createInstruction(eInstructionType type) const;
 
 private:
 	std::map<eInstructionType, functionCreate> const		_createInstruction;
 	std::map<eInstructionType, functionCreateArg> const		_createInstructionArg;
 
-	IInstruction const		*_createPush(IOperand const *) const;
-	IInstruction const		*_createAssert(IOperand const *) const;
+	AInstruction const		*_createPush(std::string const &, IOperand const *) const;
+	AInstruction const		*_createAssert(std::string const &, IOperand const *) const;
 
 
-	IInstruction const		*_createPop(void) const;
-	IInstruction const		*_createDump(void) const;
-	IInstruction const		*_createAdd(void) const;
-	IInstruction const		*_createSub(void) const;
-	IInstruction const		*_createMul(void) const;
-	IInstruction const		*_createDiv(void) const;
-	IInstruction const		*_createMod(void) const;
-	IInstruction const		*_createPrint(void) const;
-	IInstruction const		*_createExit(void) const;
+	AInstruction const		*_createPop(void) const;
+	AInstruction const		*_createDump(void) const;
+	AInstruction const		*_createAdd(void) const;
+	AInstruction const		*_createSub(void) const;
+	AInstruction const		*_createMul(void) const;
+	AInstruction const		*_createDiv(void) const;
+	AInstruction const		*_createMod(void) const;
+	AInstruction const		*_createPrint(void) const;
+	AInstruction const		*_createExit(void) const;
 
 	FactoryInstruction(FactoryInstruction const &src);
 	FactoryInstruction		&operator=(FactoryInstruction const &rhs);

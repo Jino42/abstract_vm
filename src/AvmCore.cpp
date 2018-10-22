@@ -3,7 +3,8 @@
 #include <iomanip>
 #include "InstructionException.hpp"
 
-AvmCore::AvmCore(std::string const &path) :
+AvmCore::AvmCore(std::string const &path, Ncurses *ncurses) :
+_ncurses(ncurses),
 _exit(false),
 _parser(this->_instruction),
 _path(path)
@@ -13,7 +14,8 @@ _path(path)
 	this->_parser._parse(this->_path);
 	return ;
 }
-AvmCore::AvmCore() :
+AvmCore::AvmCore(Ncurses *ncurses) :
+_ncurses(ncurses),
 _exit(false),
 _parser(this->_instruction)
 {
@@ -27,7 +29,9 @@ AvmCore::~AvmCore(void)
 {
 	if (AvmCore::_debug)
 		std::cout << "AvmCore:: Destructor called." << std::endl;
-	MutantStack<IInstruction const *>::iterator it;
+	if (this->_ncurses)
+		delete this->_ncurses;
+	MutantStack<AInstruction const *>::iterator it;
 
 	it = (this->_instruction).begin();
 	while (it != (this->_instruction).end())
@@ -59,7 +63,9 @@ MutantStack< IOperand const * >	&AvmCore::getStack(void)
 
 void	AvmCore::printInstruction(void)
 {
-	MutantStack<IInstruction const *>::iterator i;
+	if (this->_ncurses)
+		return ;
+	MutantStack<AInstruction const *>::iterator i;
 
 	i = (this->_instruction).begin();
 	while (i != (this->_instruction).end())
@@ -70,6 +76,8 @@ void	AvmCore::printInstruction(void)
 }
 void	AvmCore::printStack(void)
 {
+	if (this->_ncurses)
+		return ;
 	MutantStack<IOperand const *>::iterator i;
 
 	i = (this->_stack).begin();
@@ -79,47 +87,59 @@ void	AvmCore::printStack(void)
 		i++;
 	}
 }
+void	AvmCore::_printError(std::string const &str)
+{
+	std::cerr << str << std::endl;
+}
 
 void	AvmCore::execute(void)
 {
-	MutantStack<IInstruction const *>::iterator it;
+	unsigned int								i;
+	MutantStack<AInstruction const *>::iterator	it;
 
 	it = (this->_instruction).begin();
+	i = 0;
 	while (!this->_exit && it != (this->_instruction).end())
 	{
+		if (this->_ncurses)
+		{
+			this->_ncurses->render(this->_instruction, this->_stack, i);
+			this->_ncurses->update();
+		}
 		try
 		{
 			(*it)->execute(*this);
 		}
 		catch (InstructionException::AssertFailed const &e)
 		{
-			std::cerr << "InstructionException::AssertFailed : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			AvmCore::_printError(std::string("InstructionException::AssertFailed : \x1b[31m") + e.what() + "\x1b[0m");
 		}
 		catch (InstructionException::DivByZero const &e)
 		{
-			std::cerr << "InstructionException::DivByZero : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			AvmCore::_printError(std::string("InstructionException::DivByZero : \x1b[31m") + e.what() + "\x1b[0m");
 		}
 		catch (InstructionException::StackTooSmall const &e)
 		{
-			std::cerr << "InstructionException::StackTooSmall : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			AvmCore::_printError(std::string("InstructionException::StackTooSmall : \x1b[31m") + e.what() + "\x1b[0m");
 		}
 		catch (InstructionException::Underflow const &e)
 		{
-			std::cerr << "InstructionException::Underflow : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			AvmCore::_printError(std::string("InstructionException::Underflow : \x1b[31m") + e.what() + "\x1b[0m");
 		}
 		catch (InstructionException::Overflow const &e)
 		{
-			std::cerr << "InstructionException::Overflow : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			AvmCore::_printError(std::string("InstructionException::Overflow : \x1b[31m") + e.what() + "\x1b[0m");
 		}
 		catch (AvmCore::NoExitInstruction const &e)
 		{
-			std::cerr << "AvmCore::NoExitInstruction: \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			AvmCore::_printError(std::string("AvmCore::NoExitInstruction: \x1b[31m") + e.what() + "\x1b[0m");
 		}
 		catch (std::exception const &e)
 		{
-			std::cerr << "std::exception : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			AvmCore::_printError(std::string("std::exception : \x1b[31m") + e.what() + "\x1b[0m");
 		}
 		it++;
+		i++;
 	}
 	if (!this->_exit)
 		throw(AvmCore::NoExitInstruction());

@@ -1,22 +1,20 @@
 #ifndef INSTRUCTIONDIV_HPP
 # define INSTRUCTIONDIV_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 
-class InstructionDiv : public IInstruction {
+class InstructionDiv : public AInstruction {
 
 public:
 
 	InstructionDiv(void);
 	~InstructionDiv(void);
 
+	void				execute(AvmCore &avm) const;
+private:
+
 	InstructionDiv(InstructionDiv const &src);
 	InstructionDiv		&operator=(InstructionDiv const &rhs);
-
-	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
-private:
-	eInstructionType const	_type;
 
 	static const bool	_debug;
 };

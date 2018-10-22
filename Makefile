@@ -8,7 +8,7 @@ EXE= avm
 
 CXX= clang++
 CXXFLAGS= -Wall -Wextra -Werror -Wvla -std=c++11 -fsanitize=address -g3 -MMD
-
+NCURSES= -L ~/.brew/lib/ -lncurses
 #============HEADERS============#
 
 HEADER_DIR= include/
@@ -20,9 +20,11 @@ HEADER_FILE = IOperand.hpp \
 Operand.tpp \
 FactoryOperand.hpp \
 AvmCore.hpp \
-IInstruction.hpp \
+AInstruction.hpp \
 FactoryInstruction.hpp \
 AvmParser.hpp \
+Ncurses.hpp \
+Vector2D.tpp \
 instruction/InstructionAdd.hpp \
 instruction/InstructionDiv.hpp \
 instruction/InstructionDump.hpp \
@@ -34,7 +36,7 @@ instruction/InstructionPrint.hpp \
 instruction/InstructionPush.hpp \
 instruction/InstructionSub.hpp \
 instruction/InstructionAssert.hpp \
-instruction/InstructionException.hpp
+instruction/InstructionException.hpp \
 
 #============COLORS=============#
 
@@ -48,9 +50,11 @@ SRC_DIR = ./src/
 
 SRC_FILE= main.cpp \
 FactoryOperand.cpp \
+AInstruction.cpp \
 AvmCore.cpp \
 AvmParser.cpp \
 FactoryInstruction.cpp \
+Ncurses.cpp \
 instruction/InstructionAdd.cpp \
 instruction/InstructionDiv.cpp \
 instruction/InstructionDump.cpp \
@@ -80,7 +84,7 @@ all: $(EXE)
 
 $(EXE): $(OBJ_DIR) $(OBJ)
 	@echo "\t$(EXE)'s objects compiled"
-	@$(CXX) $(CXXFLAGS) $(OBJ) -o $(EXE)
+	@$(CXX) $(CXXFLAGS) $(OBJ) $(NCURSES) -o $(EXE)
 	@echo "executable $(GREEN)$(EXE)$(EOC) created"
 	@echo "$(GREEN)---------->>>$(EOC)"
 

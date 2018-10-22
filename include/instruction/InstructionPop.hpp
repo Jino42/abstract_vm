@@ -1,22 +1,20 @@
 #ifndef INSTRUCTIONPOP_HPP
 # define INSTRUCTIONPOP_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 
-class InstructionPop : public IInstruction {
+class InstructionPop : public AInstruction {
 
 public:
 
 	InstructionPop(void);
 	~InstructionPop(void);
 
+	void				execute(AvmCore &avm) const;
+private:
+
 	InstructionPop(InstructionPop const &src);
 	InstructionPop		&operator=(InstructionPop const &rhs);
-
-	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
-private:
-	eInstructionType const	_type;
 
 	static const bool	_debug;
 };

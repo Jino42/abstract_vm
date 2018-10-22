@@ -1,22 +1,20 @@
 #ifndef INSTRUCTIONEXIT_HPP
 # define INSTRUCTIONEXIT_HPP
 
-#include "IInstruction.hpp"
+#include "AInstruction.hpp"
 
-class InstructionExit : public IInstruction {
+class InstructionExit : public AInstruction {
 
 public:
 
 	InstructionExit(void);
 	~InstructionExit(void);
 
+	void				execute(AvmCore &avm) const;
+private:
+
 	InstructionExit(InstructionExit const &src);
 	InstructionExit		&operator=(InstructionExit const &rhs);
-
-	void				execute(AvmCore &avm) const;
-	eInstructionType	getType(void) const;
-private:
-	eInstructionType const	_type;
 
 	static const bool	_debug;
 };
