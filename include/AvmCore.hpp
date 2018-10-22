@@ -9,17 +9,6 @@ class AvmCore {
 
 public:
 
-	class StackTooSmall : public std::logic_error {
-	public:
-		StackTooSmall(void) throw();
-		StackTooSmall(std::string) throw();
-		virtual const char* what() const throw();
-		~StackTooSmall(void) throw();
-		StackTooSmall(StackTooSmall const &src) throw();
-	private:
-		StackTooSmall &operator=(StackTooSmall const &rhs) throw();
-		std::string			_error;
-	};
 	class NoExitInstruction : public std::runtime_error {
 	public:
 		NoExitInstruction(void) throw();

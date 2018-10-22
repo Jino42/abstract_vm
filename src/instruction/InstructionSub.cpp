@@ -1,6 +1,7 @@
 #include <iostream>
 #include "InstructionSub.hpp"
 #include "AvmCore.hpp"
+#include "InstructionException.hpp"
 
 InstructionSub::InstructionSub(void) :
 _type(Sub)
@@ -46,8 +47,8 @@ void					InstructionSub::execute(AvmCore &avm) const
 	if (avm.getStack().size() < 2)
 	{
 		if (!avm.getStack().size())
-			throw(AvmCore::StackTooSmall("Trying Sub with a empty stack"));
-		throw(AvmCore::StackTooSmall("Trying Sub with a too small stack"));
+			throw(InstructionException::StackTooSmall("Trying Sub with a empty stack"));
+		throw(InstructionException::StackTooSmall("Trying Sub with a too small stack"));
 	}
 
 	IOperand const *v1 = avm.getStack().top();

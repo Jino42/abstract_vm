@@ -2,6 +2,7 @@
 #include "InstructionPush.hpp"
 #include "AvmCore.hpp"
 #include "FactoryOperand.hpp"
+#include "InstructionException.hpp"
 
 InstructionPush::InstructionPush(IOperand const *operand) :
 _type(Push),

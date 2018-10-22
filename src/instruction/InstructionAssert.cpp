@@ -1,6 +1,7 @@
 #include <iostream>
 #include "InstructionAssert.hpp"
 #include "AvmCore.hpp"
+#include "InstructionException.hpp"
 
 InstructionAssert::InstructionAssert(IOperand const *operand) :
 _type(Assert),
@@ -50,27 +51,15 @@ void					InstructionAssert::execute(AvmCore &avm) const
 	if (avm.getStack().size() < 1)
 	{
 		if (!avm.getStack().size())
-			throw(AvmCore::StackTooSmall("Trying Add with a empty stack"));
+			throw(InstructionException::StackTooSmall("Trying Add with a empty stack"));
 	}
 
 	IOperand const *v1 = avm.getStack().top();
 
 	if (v1->toString() != this->_value->toString())
-		throw(InstructionAssert::AssertFailed("Assert failed : [" + v1->toString() + " != " + this->_value->toString() + "]"));
+		throw(InstructionException::AssertFailed("Assert failed : [" + v1->toString() + " != " + this->_value->toString() + "]"));
+	if (v1->getType() != this->_value->getType())
+		throw(InstructionException::AssertFailed("Assert failed : [Type are different]"));
 }
 
 const bool		InstructionAssert::_debug = 0;
-
-InstructionAssert::AssertFailed::~AssertFailed(void) throw(){}
-InstructionAssert::AssertFailed::AssertFailed(void) throw() :
-	runtime_error(this->_error),
-	_error("Your assert failed") {}
-InstructionAssert::AssertFailed::AssertFailed(std::string s) throw() :
-	runtime_error(s),
-	_error(s) { }
-InstructionAssert::AssertFailed::AssertFailed(InstructionAssert::AssertFailed const &src) throw() :
-	runtime_error(this->_error),
-	_error(src._error)
-	{ this->_error = src._error; }
-const char	*InstructionAssert::AssertFailed::what() const throw()
-	{ return (this->_error.c_str()); }

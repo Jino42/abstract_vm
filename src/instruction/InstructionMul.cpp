@@ -1,6 +1,7 @@
 #include <iostream>
 #include "InstructionMul.hpp"
 #include "AvmCore.hpp"
+#include "InstructionException.hpp"
 
 InstructionMul::InstructionMul(void) :
 _type(Mul)
@@ -46,8 +47,8 @@ void					InstructionMul::execute(AvmCore &avm) const
 	if (avm.getStack().size() < 2)
 	{
 		if (!avm.getStack().size())
-			throw(AvmCore::StackTooSmall("Trying Mul with a empty stack"));
-		throw(AvmCore::StackTooSmall("Trying Mul with a too small stack"));
+			throw(InstructionException::StackTooSmall("Trying Mul with a empty stack"));
+		throw(InstructionException::StackTooSmall("Trying Mul with a too small stack"));
 	}
 
 	IOperand const *v1 = avm.getStack().top();

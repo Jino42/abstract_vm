@@ -1,6 +1,7 @@
 #include <iostream>
 #include "InstructionMod.hpp"
 #include "AvmCore.hpp"
+#include "InstructionException.hpp"
 
 InstructionMod::InstructionMod(void) :
 _type(Mod)
@@ -46,8 +47,8 @@ void					InstructionMod::execute(AvmCore &avm) const
 	if (avm.getStack().size() < 2)
 	{
 		if (!avm.getStack().size())
-			throw(AvmCore::StackTooSmall("Trying Mod with a empty stack"));
-		throw(AvmCore::StackTooSmall("Trying Mod with a too small stack"));
+			throw(InstructionException::StackTooSmall("Trying Mod with a empty stack"));
+		throw(InstructionException::StackTooSmall("Trying Mod with a too small stack"));
 	}
 
 	IOperand const *v1 = avm.getStack().top();

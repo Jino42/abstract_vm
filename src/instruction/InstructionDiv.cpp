@@ -1,6 +1,7 @@
 #include <iostream>
 #include "InstructionDiv.hpp"
 #include "AvmCore.hpp"
+#include "InstructionException.hpp"
 
 InstructionDiv::InstructionDiv(void) :
 _type(Div)
@@ -46,8 +47,8 @@ void					InstructionDiv::execute(AvmCore &avm) const
 	if (avm.getStack().size() < 2)
 	{
 		if (!avm.getStack().size())
-			throw(AvmCore::StackTooSmall("Trying Div with a empty stack"));
-		throw(AvmCore::StackTooSmall("Trying Div with a too small stack"));
+			throw(InstructionException::StackTooSmall("Trying Div with a empty stack"));
+		throw(InstructionException::StackTooSmall("Trying Div with a too small stack"));
 	}
 
 	IOperand const *v1 = avm.getStack().top();
@@ -55,6 +56,8 @@ void					InstructionDiv::execute(AvmCore &avm) const
 	IOperand const *v2 = avm.getStack().top();
 	avm.getStack().pop();
 
+	if (std::stod(v1->toString()) == 0.0)
+		throw(InstructionException::DivByZero());
 	avm.getStack().push(*v2 / *v1);
 	delete v1;
 	delete v2;
