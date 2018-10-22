@@ -52,7 +52,7 @@ void					InstructionPush::execute(AvmCore &avm) const
 			FactoryOperand::getInstance()->createOperand(
 													this->_value->getType(),
 													this->_value->toString(),
-													FactoryOperand::getStringPrecision(this->_value->toString())));
+													this->_value->getPrecision()));
 }
 
 const bool		InstructionPush::_debug = 0;

@@ -62,6 +62,7 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 	if ((eoperand != Float && eoperand != Double)
 		&& !std::regex_match(std::string(cm[3]), std::regex("^([0-9]+)$")))
 		throw(AvmParser::InvalidInstruction(line + " is not a complet Instruction"));
+	std::cout << "/////" << FactoryOperand::getStringPrecision(cm[3]) << std::endl;
 	return (FactoryOperand::getInstance()->createOperand(eoperand, cm[3], FactoryOperand::getStringPrecision(cm[3])));
 }
 

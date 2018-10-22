@@ -1,6 +1,6 @@
 #include <iostream>
 #include "AvmCore.hpp"
-
+#include <iomanip>
 
 AvmCore::AvmCore(std::string const &path) :
 _parser(this->_instruction),
@@ -59,9 +59,12 @@ void	AvmCore::printStack(void)
 	MutantStack<IOperand const *>::iterator i;
 
 	i = (this->_stack).begin();
+	std::cout << "------------- PrintStack" << std::endl;
 	while (i != (this->_stack).end())
 	{
-		std::cout << " S---S " << (*i)->toString() << " P[" << (*i)->getPrecision() << "]"<< std::endl;
+		//std::cout << " S---S " << std::fixed << std::setprecision((*i)->getPrecision()) << std::stof((*i)->toString()) << " S [" << (*i)->toString() << "]  "<< " P[" << (*i)->getPrecision() << "]"<< std::endl;
+
+		std::cout << std::fixed << std::setprecision((*i)->getPrecision()) << std::stof((*i)->toString()) << std::endl;
 		i++;
 	}
 }

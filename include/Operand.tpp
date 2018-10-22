@@ -4,6 +4,8 @@
 #include "IOperand.hpp"
 #include "FactoryOperand.hpp"
 #include <cmath>
+#include <sstream>
+#include <iomanip>
 
 template < typename T >
 class Operand : public IOperand {
@@ -80,7 +82,7 @@ IOperand const *Operand<T>::operator*(IOperand const &rhs) const
 {
 	double value;
 
-	value = static_cast<double>(this->_value) * static_cast<double>(stof(rhs.toString()));
+	value = static_cast<double>(this->_value) * static_cast<double>(stod(rhs.toString()));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 template <typename T>
@@ -88,7 +90,7 @@ IOperand const *Operand<T>::operator/(IOperand const &rhs) const
 {
 	double value;
 
-	value = static_cast<double>(this->_value) / static_cast<double>(stof(rhs.toString()));
+	value = static_cast<double>(this->_value) / static_cast<double>(stod(rhs.toString()));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 template <typename T>
@@ -96,15 +98,17 @@ IOperand const *Operand<T>::operator-(IOperand const &rhs) const
 {
 	double value;
 
-	value = static_cast<double>(this->_value) - static_cast<double>(stof(rhs.toString()));
+	value = static_cast<double>(this->_value) - static_cast<double>(stod(rhs.toString()));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 template <typename T>
 IOperand const *Operand<T>::operator+(IOperand const &rhs) const
 {
+	std::stringstream ss;
+
 	double value;
 
-	value = static_cast<double>(this->_value) + static_cast<double>(stof(rhs.toString()));
+	value = static_cast<double>(this->_value) + static_cast<double>(stod(rhs.toString()));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 template <typename T>
@@ -112,7 +116,7 @@ IOperand const *Operand<T>::operator%(IOperand const &rhs) const
 {
 	double value;
 
-	value = std::fmod(static_cast<double>(this->_value), static_cast<double>(stof(rhs.toString())));
+	value = std::fmod(static_cast<double>(this->_value), static_cast<double>(stod(rhs.toString())));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 
