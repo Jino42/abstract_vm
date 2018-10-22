@@ -10,7 +10,7 @@ class Operand : public IOperand {
 
 public:
 
-	Operand(eOperandType e, std::string const &value);
+	Operand(eOperandType e, double value, int precision);
 	Operand(Operand<T> const &src);
 	~Operand(void) { }
 
@@ -35,25 +35,24 @@ private:
 	Operand(void);
 
 	static IOperand const	*_returnOperand(IOperand const &lhs, IOperand const &rhs, double value);
-	static int				_getPrecisionOfString(std::string const &value);
 
 	static const bool	_debug;
 };
 
 template <typename T>
-Operand<T>::Operand(eOperandType e, std::string const &value) :
+Operand<T>::Operand(eOperandType e, double value, int precision) :
 	_eOperandType(e),
-	_value(std::stod(value)),
-	_stringValue(value),
-	_precision(Operand<T>::_getPrecisionOfString(this->_stringValue))
+	_value(value),
+	_stringValue(std::to_string(this->_value)),
+	_precision(precision)
 { }
 
 template <typename T>
 Operand<T>::Operand(Operand<T> const &src) :
 	_eOperandType(src._eOperandType),
 	_value(src._value),
-	_stringValue(std::to_string(this->_value)),
-	_precision(Operand<T>::_getPrecisionOfString(this->_stringValue))
+	_stringValue(src._stringValue),
+	_precision(src._precision)
 {
 	*this = src;
 }
@@ -120,21 +119,11 @@ IOperand const *Operand<T>::operator%(IOperand const &rhs) const
 template <typename T>
 IOperand const *Operand<T>::_returnOperand(IOperand const &lhs, IOperand const &rhs, double value)
 {
-	if (lhs.getType() > rhs.getType())
-		return (FactoryOperand::getInstance()->createOperand(lhs.getType(), std::to_string(value)));
-	return (FactoryOperand::getInstance()->createOperand(rhs.getType(), std::to_string(value)));
+	return (FactoryOperand::getInstance()->createOperand(
+					std::max(lhs.getType(), rhs.getType()),
+					std::to_string(value),
+					std::max(lhs.getPrecision(), rhs.getPrecision())));
 }
-
-template <typename T>
-int				Operand<T>::_getPrecisionOfString(std::string const &value)
-{
-	std::size_t		found;
-
-	if ((found = value.find(".")) == std::string::npos)
-		return (0);
-	return (std::string(value, found + 1).length());
-}
-
 
 
 #endif

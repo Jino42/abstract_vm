@@ -12,8 +12,8 @@ int		main(int argc, char **argv)
 		FactoryOperand const *fo = FactoryOperand::getInstance();
 		IOperand const *a, *b, *c;
 
-		a = fo->createOperand(Int8, "4");
-		b = fo->createOperand(Float, "4.42f");
+		a = fo->createOperand(Int8, "4", 0);
+		b = fo->createOperand(Float, "4.42f", 2);
 
 		c = *a * *b;
 

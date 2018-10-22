@@ -17,30 +17,30 @@ FactoryOperand::~FactoryOperand(void)
 	return ;
 }
 
-IOperand const		*FactoryOperand::createOperand(eOperandType type, std::string const &value) const
+IOperand const		*FactoryOperand::createOperand(eOperandType type, std::string const &value, int precision) const
 {
-	return((this->*_createOperand.at(type))(value));
+	return((this->*_createOperand.at(type))(value, precision));
 }
 
-IOperand const		*FactoryOperand::_createInt8(std::string const &value) const
+IOperand const		*FactoryOperand::_createInt8(std::string const &value, int precision) const
 {
-	return (new Operand<int8_t>(Int8, value));
+	return (new Operand<int8_t>(Int8, std::stod(value), precision));
 }
-IOperand const		*FactoryOperand::_createInt16(std::string const &value) const
+IOperand const		*FactoryOperand::_createInt16(std::string const &value, int precision) const
 {
-	return (new Operand<int16_t>(Int16, value));
+	return (new Operand<int16_t>(Int16, std::stod(value), precision));
 }
-IOperand const		*FactoryOperand::_createInt32(std::string const &value) const
+IOperand const		*FactoryOperand::_createInt32(std::string const &value, int precision) const
 {
-	return (new Operand<int32_t>(Int32, value));
+	return (new Operand<int32_t>(Int32, std::stod(value), precision));
 }
-IOperand const		*FactoryOperand::_createFloat(std::string const &value) const
+IOperand const		*FactoryOperand::_createFloat(std::string const &value, int precision) const
 {
-	return (new Operand<float>(Float, value));
+	return (new Operand<float>(Float, std::stod(value), precision));
 }
-IOperand const		*FactoryOperand::_createDouble(std::string const &value) const
+IOperand const		*FactoryOperand::_createDouble(std::string const &value, int precision) const
 {
-	return (new Operand<double>(Double, value));
+	return (new Operand<double>(Double, std::stod(value), precision));
 }
 
 
@@ -63,11 +63,20 @@ void					FactoryOperand::deleteInstance(void)
 	}
 }
 
+int				FactoryOperand::getStringPrecision(std::string const &value)
+{
+	std::size_t		found;
+
+	if ((found = value.find(".")) == std::string::npos)
+		return (0);
+	return (std::string(value, found + 1).length());
+}
+
 FactoryOperand	*FactoryOperand::_singleton = nullptr;
 
-std::map< eOperandType, IOperand const *(FactoryOperand::*)(std::string const &) const > const	FactoryOperand::_createMapCreateOperand(void)
+std::map< eOperandType, IOperand const *(FactoryOperand::*)(std::string const &, int) const > const	FactoryOperand::_createMapCreateOperand(void)
 {
-	std::map< eOperandType, IOperand const *(FactoryOperand::*)(std::string const &) const > _createOperand;
+	std::map< eOperandType, IOperand const *(FactoryOperand::*)(std::string const &, int) const > _createOperand;
 
 	_createOperand[Int8] = &FactoryOperand::_createInt8;
 	_createOperand[Int16] = &FactoryOperand::_createInt16;

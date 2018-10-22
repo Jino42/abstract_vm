@@ -7,7 +7,7 @@ EXE= avm
 #=======COMPILER AND FLAGS======#
 
 CXX= clang++
-CXXFLAGS= -Wall -Wextra -Werror -Wvla -std=c++11 -MMD
+CXXFLAGS= -Wall -Wextra -Werror -Wvla -std=c++11 -fsanitize=address -g3 -MMD
 
 #============HEADERS============#
 
@@ -67,7 +67,7 @@ SRC = $(addprefix $(SRC_DIR), $(SRC_FILE))
 
 OBJ_DIR = ./obj/
 OBJ = $(addprefix $(OBJ_DIR), $(OBJ_FILE))
-OBJ_FILE= ${SRC_FILE:.cpp=.o}
+OBJ_FILE= $(SRC_FILE:.cpp=.o)
 
 DEPENDS= $(OBJ:.o=.d)
 

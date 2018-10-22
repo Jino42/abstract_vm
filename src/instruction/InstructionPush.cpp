@@ -48,7 +48,11 @@ eInstructionType		InstructionPush::getType(void) const
 
 void					InstructionPush::execute(AvmCore &avm) const
 {
-	avm.getStack().push(FactoryOperand::getInstance()->createOperand(this->_value->getType(), this->_value->toString()));
+	avm.getStack().push(
+			FactoryOperand::getInstance()->createOperand(
+													this->_value->getType(),
+													this->_value->toString(),
+													FactoryOperand::getStringPrecision(this->_value->toString())));
 }
 
 const bool		InstructionPush::_debug = 0;
