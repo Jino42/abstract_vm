@@ -24,23 +24,23 @@ IOperand const		*FactoryOperand::createOperand(eOperandType type, std::string co
 
 IOperand const		*FactoryOperand::_createInt8(std::string const &value) const
 {
-	return (new Operand<int8_t>(Int8, stod(value)));
+	return (new Operand<int8_t>(Int8, value));
 }
 IOperand const		*FactoryOperand::_createInt16(std::string const &value) const
 {
-	return (new Operand<int16_t>(Int16, stod(value)));
+	return (new Operand<int16_t>(Int16, value));
 }
 IOperand const		*FactoryOperand::_createInt32(std::string const &value) const
 {
-	return (new Operand<int32_t>(Int32, stod(value)));
+	return (new Operand<int32_t>(Int32, value));
 }
 IOperand const		*FactoryOperand::_createFloat(std::string const &value) const
 {
-	return (new Operand<float>(Float, stod(value)));
+	return (new Operand<float>(Float, value));
 }
 IOperand const		*FactoryOperand::_createDouble(std::string const &value) const
 {
-	return (new Operand<double>(Double, stod(value)));
+	return (new Operand<double>(Double, value));
 }
 
 

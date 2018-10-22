@@ -11,7 +11,7 @@ class AvmParser {
 
 public:
 
-	class InvalidInstruction : public std::exception {
+	class InvalidInstruction : public std::invalid_argument {
 	public:
 		InvalidInstruction(void) throw();
 		InvalidInstruction(std::string) throw();

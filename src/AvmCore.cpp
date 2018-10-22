@@ -61,7 +61,7 @@ void	AvmCore::printStack(void)
 	i = (this->_stack).begin();
 	while (i != (this->_stack).end())
 	{
-		std::cout << (*i)->toString() << std::endl;
+		std::cout << " S---S " << (*i)->toString() << " P[" << (*i)->getPrecision() << "]"<< std::endl;
 		i++;
 	}
 }
@@ -74,6 +74,7 @@ void	AvmCore::execute(void)
 	while (it != (this->_instruction).end())
 	{
 		(*it)->execute(*this);
+		this->printStack();
 		it++;
 	}
 }

@@ -147,10 +147,13 @@ std::map<std::string, eOperandType>			AvmParser::eoperandByString = {
 
 AvmParser::InvalidInstruction::~InvalidInstruction(void) throw() {}
 AvmParser::InvalidInstruction::InvalidInstruction(void) throw() :
+	invalid_argument(this->_error),
 	_error("InvalidInstruction Error") { }
 AvmParser::InvalidInstruction::InvalidInstruction(std::string s) throw() :
+	invalid_argument(this->_error),
 	_error(s) { }
-AvmParser::InvalidInstruction::InvalidInstruction(AvmParser::InvalidInstruction const &src) throw()
+AvmParser::InvalidInstruction::InvalidInstruction(AvmParser::InvalidInstruction const &src) throw() :
+	invalid_argument(this->_error)
 	{ this->_error = src._error; }
 const char	*AvmParser::InvalidInstruction::what() const throw()
 	{ return (this->_error.c_str()); }

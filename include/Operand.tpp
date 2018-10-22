@@ -10,10 +10,11 @@ class Operand : public IOperand {
 
 public:
 
-	Operand(eOperandType e, T const &value);
+	Operand(eOperandType e, std::string const &value);
 	Operand(Operand<T> const &src);
 	~Operand(void) { }
 
+	int					getPrecision( void ) const;
 	eOperandType		getType(void) const;
 
 	IOperand const		*operator*(IOperand const &rhs) const;
@@ -28,27 +29,31 @@ private:
 	eOperandType		const _eOperandType;
 	T					const _value;
 	std::string			const _stringValue;
+	int					_precision;
 
 	Operand				&operator=(Operand const &rhs);
 	Operand(void);
 
-	static IOperand const *_returnOperand(IOperand const &lhs, IOperand const &rhs, double value);
+	static IOperand const	*_returnOperand(IOperand const &lhs, IOperand const &rhs, double value);
+	static int				_getPrecisionOfString(std::string const &value);
 
 	static const bool	_debug;
 };
 
 template <typename T>
-Operand<T>::Operand(eOperandType e, T const &value) :
+Operand<T>::Operand(eOperandType e, std::string const &value) :
 	_eOperandType(e),
-	_value(value),
-	_stringValue(std::to_string(this->_value))
+	_value(std::stod(value)),
+	_stringValue(value),
+	_precision(Operand<T>::_getPrecisionOfString(this->_stringValue))
 { }
 
 template <typename T>
 Operand<T>::Operand(Operand<T> const &src) :
 	_eOperandType(src._eOperandType),
 	_value(src._value),
-	_stringValue(std::to_string(this->_value))
+	_stringValue(std::to_string(this->_value)),
+	_precision(Operand<T>::_getPrecisionOfString(this->_stringValue))
 {
 	*this = src;
 }
@@ -57,6 +62,12 @@ template <typename T>
 std::string const	&Operand<T>::toString(void) const
 {
 	return (this->_stringValue);
+}
+
+template <typename T>
+int					Operand<T>::getPrecision( void ) const
+{
+	return (this->_precision);
 }
 
 template <typename T>
@@ -113,6 +124,17 @@ IOperand const *Operand<T>::_returnOperand(IOperand const &lhs, IOperand const &
 		return (FactoryOperand::getInstance()->createOperand(lhs.getType(), std::to_string(value)));
 	return (FactoryOperand::getInstance()->createOperand(rhs.getType(), std::to_string(value)));
 }
+
+template <typename T>
+int				Operand<T>::_getPrecisionOfString(std::string const &value)
+{
+	std::size_t		found;
+
+	if ((found = value.find(".")) == std::string::npos)
+		return (0);
+	return (std::string(value, found + 1).length());
+}
+
 
 
 #endif

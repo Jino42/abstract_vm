@@ -20,20 +20,6 @@ public:
 		StackTooSmall &operator=(StackTooSmall const &rhs) throw();
 		std::string			_error;
 	};
-/*
-	class StackError : virtual public std::logic_error {
-		private:
-			const char *_what;
-		public:
-			StackError() = delete;
-
-			StackError(StackError const &) noexcept;
-
-			StackError &operator=(StackError const &);
-
-			explicit StackError(char const *what) noexcept;
-
-		};*/
 
 	AvmCore(std::string const &path);
 	~AvmCore(void);
