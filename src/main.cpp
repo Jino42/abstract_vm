@@ -41,11 +41,20 @@ int		main(int argc, char **argv)
 		fi.createInstruction(Pop);
 		fi.createInstruction(Dump);
 
-		AvmCore core(argv[1]);
-
-		core.printInstruction();
-		core.execute();
-		core.printStack();
+		if (argc == 2)
+		{
+			AvmCore core(argv[1]);
+			core.printInstruction();
+			core.execute();
+			core.printStack();
+		}
+		else
+		{
+			AvmCore core;
+			core.printInstruction();
+			core.execute();
+			core.printStack();
+		}
 	}
 	return (0);
 }

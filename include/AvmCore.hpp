@@ -22,6 +22,7 @@ public:
 	};
 
 	AvmCore(std::string const &path);
+	AvmCore(void);
 	~AvmCore(void);
 
 	MutantStack< IOperand const * >	&getStack(void);
@@ -39,7 +40,6 @@ private:
 	MutantStack< IOperand const * >			_stack;
 	std::string const					_path;
 
-	AvmCore(void);
 	AvmCore(AvmCore const &src);
 	AvmCore		&operator=(AvmCore const &rhs);
 

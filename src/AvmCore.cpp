@@ -1,6 +1,7 @@
 #include <iostream>
 #include "AvmCore.hpp"
 #include <iomanip>
+#include "InstructionException.hpp"
 
 AvmCore::AvmCore(std::string const &path) :
 _exit(false),
@@ -10,6 +11,15 @@ _path(path)
 	if (AvmCore::_debug)
 		std::cout << "AvmCore:: Default constructor called." << std::endl;
 	this->_parser._parse(this->_path);
+	return ;
+}
+AvmCore::AvmCore() :
+_exit(false),
+_parser(this->_instruction)
+{
+	if (AvmCore::_debug)
+		std::cout << "AvmCore:: Default constructor called." << std::endl;
+	this->_parser._parse();
 	return ;
 }
 
@@ -77,7 +87,18 @@ void	AvmCore::execute(void)
 	it = (this->_instruction).begin();
 	while (!this->_exit && it != (this->_instruction).end())
 	{
-		(*it)->execute(*this);
+		try
+		{
+			(*it)->execute(*this);
+		}
+		catch (InstructionException::Underflow const &e)
+		{
+			std::cerr << "\x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+		}
+		catch (std::exception const &e)
+		{
+			std::cerr << "\x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+		}
 		it++;
 	}
 	if (!this->_exit)
