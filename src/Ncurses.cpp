@@ -89,7 +89,7 @@ void Ncurses::render(MutantStack<AInstruction const *> &instruction,
 		it = instruction.begin();
 		for (unsigned int j = 0; j < i; j++)
 		{
-			this->printString(Vector2D<int>(0, j), AvmParser::stringByEinstruction[(*it)->getType()]);
+			this->printString(Vector2D<int>(0, j), (*it)->toString());
 			it++;
 		}
 	}

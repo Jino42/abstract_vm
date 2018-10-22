@@ -17,8 +17,8 @@ public:
 
 	iterator	begin();
 	iterator	end();
-	//iterator	rbegin();
-	//iterator	rend();
+	iterator	rbegin();
+	iterator	rend();
 
 private:
 
@@ -35,7 +35,7 @@ typename MutantStack<T>::iterator	MutantStack<T>::end()
 {
 	return this->c.end();
 }
-/*
+
 template < typename T >
 typename MutantStack<T>::iterator	MutantStack<T>::rbegin()
 {
@@ -46,6 +46,6 @@ template < typename T >
 typename MutantStack<T>::iterator	MutantStack<T>::rend()
 {
 	return this->c.rend();
-}*/
+}
 
 #endif

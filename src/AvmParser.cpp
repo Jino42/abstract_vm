@@ -58,13 +58,6 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 
 	std::regex_match(instruction.c_str(), cm, this->_isValidInstruction, std::regex_constants::match_default);
 
-	/*
-	std::cout << "Begin : ";
-	for (unsigned i = 0; i < cm.size(); i++)
-		std::cout <<  "[" << cm[i] << "] ";
-	std::cout << std::endl;
-	*/
-
 	if (cm.size() != 6)
 		throw(AvmParser::InvalidInstruction(instruction + " -> is not a complet Instruction"));
 
@@ -90,7 +83,7 @@ AInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::s
 			std::size_t			found;
 			if ((found = line.find(")")) == std::string::npos)
 				throw(AvmParser::InvalidInstruction(line + " -> is not a complet Instruction"));
-			return (this->_factoryInstruction.createInstruction(line.substr(found + 1), einstruction, this->_parseOperandInstruction(line)));
+			return (this->_factoryInstruction.createInstruction(line.substr(0, found + 1), einstruction, this->_parseOperandInstruction(line)));
 		}
 		else
 			return (this->_factoryInstruction.createInstruction(einstruction));
