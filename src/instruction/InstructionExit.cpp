@@ -43,7 +43,7 @@ eInstructionType		InstructionExit::getType(void) const
 
 void					InstructionExit::execute(AvmCore &avm) const
 {
-	static_cast<void>(avm);
+	avm.setExit(true);
 }
 
 const bool		InstructionExit::_debug = 0;

@@ -9,6 +9,18 @@ class InstructionAssert : public IInstruction {
 
 public:
 
+	class AssertFailed : public std::runtime_error {
+	public:
+		AssertFailed(void) throw();
+		AssertFailed(std::string) throw();
+		virtual const char* what() const throw();
+		~AssertFailed(void) throw();
+		AssertFailed(AssertFailed const &src) throw();
+	private:
+		AssertFailed &operator=(AssertFailed const &rhs) throw();
+		std::string			_error;
+	};
+
 	InstructionAssert(IOperand const *);
 	~InstructionAssert(void);
 

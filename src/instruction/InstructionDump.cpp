@@ -43,7 +43,7 @@ eInstructionType		InstructionDump::getType(void) const
 
 void					InstructionDump::execute(AvmCore &avm) const
 {
-	static_cast<void>(avm);
+	avm.printStack();
 }
 
 const bool		InstructionDump::_debug = 0;
