@@ -91,13 +91,33 @@ void	AvmCore::execute(void)
 		{
 			(*it)->execute(*this);
 		}
+		catch (InstructionException::AssertFailed const &e)
+		{
+			std::cerr << "InstructionException::AssertFailed : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+		}
+		catch (InstructionException::DivByZero const &e)
+		{
+			std::cerr << "InstructionException::DivByZero : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+		}
+		catch (InstructionException::StackTooSmall const &e)
+		{
+			std::cerr << "InstructionException::StackTooSmall : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+		}
 		catch (InstructionException::Underflow const &e)
 		{
-			std::cerr << "\x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			std::cerr << "InstructionException::Underflow : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+		}
+		catch (InstructionException::Overflow const &e)
+		{
+			std::cerr << "InstructionException::Overflow : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+		}
+		catch (AvmCore::NoExitInstruction const &e)
+		{
+			std::cerr << "AvmCore::NoExitInstruction: \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
 		}
 		catch (std::exception const &e)
 		{
-			std::cerr << "\x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			std::cerr << "std::exception : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
 		}
 		it++;
 	}

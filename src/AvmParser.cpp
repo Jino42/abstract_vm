@@ -50,11 +50,11 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 
 	std::size_t			found;
 	if ((found = line.find(")")) == std::string::npos)
-		throw(AvmParser::InvalidInstruction(line + " is not a complet Instruction"));
+		throw(AvmParser::InvalidInstruction(line + " -> is not a complet Instruction"));
 	instruction = line.substr(0, found + 1);
 
 	if (!AvmParser::_isEmptyString(line.substr(found + 1)))
-		throw(AvmParser::InvalidInstruction(line.substr(found) + " after instruction"));
+		throw(AvmParser::InvalidInstruction(line.substr(found) + " -> after instruction"));
 
 	std::regex_match(instruction.c_str(), cm, this->_isValidInstruction, std::regex_constants::match_default);
 
@@ -64,16 +64,15 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 	std::cout << std::endl;*/
 
 	if (cm.size() != 6)
-		throw(AvmParser::InvalidInstruction(instruction + " is not a complet Instruction"));
+		throw(AvmParser::InvalidInstruction(instruction + " -> is not a complet Instruction"));
 
 	eoperand = AvmParser::eoperandByString.at(cm[2]);
 	if ((eoperand == Float || eoperand == Double)
 		&& !std::regex_match(std::string(cm[3]), std::regex("([0-9]+\\.[0-9]+)")))
-		throw(AvmParser::InvalidInstruction(instruction + " is not a complet Instruction"));
+		throw(AvmParser::InvalidInstruction(instruction + " -> is not a complet Instruction"));
 	if ((eoperand != Float && eoperand != Double)
 		&& !std::regex_match(std::string(cm[3]), std::regex("^([0-9]+)$")))
-		throw(AvmParser::InvalidInstruction(instruction + " is not a complet Instruction"));
-	std::cout << "/////" << FactoryOperand::getStringPrecision(cm[3]) << std::endl;
+		throw(AvmParser::InvalidInstruction(instruction + " -> is not a complet Instruction"));
 	return (FactoryOperand::getInstance()->createOperand(eoperand, cm[3], FactoryOperand::getStringPrecision(cm[3])));
 }
 
@@ -91,7 +90,7 @@ IInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::s
 	}
 	catch (std::out_of_range const &e)
 	{
-		throw(AvmParser::InvalidInstruction(line + " is not an Instruction"));
+		throw(AvmParser::InvalidInstruction(line + "-> is not an Instruction"));
 	}
 	catch (std::exception const &e)
 	{
@@ -117,11 +116,15 @@ void				AvmParser::_parse(std::string const &path)
 			}
 			catch (InstructionException::Underflow const &e)
 			{
-				std::cerr << "\x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+				std::cerr << "InstructionException::Underflow : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+			}
+			catch (InstructionException::Overflow const &e)
+			{
+				std::cerr << "InstructionException::Overflow : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
 			}
 			catch (std::exception const &e)
 			{
-				std::cerr << "\x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+				std::cerr << "std::exception : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
 			}
 		}
 	}
