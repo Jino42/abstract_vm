@@ -36,8 +36,6 @@ std::string			AvmParser::_getInstructionFromString(std::string const &line)
 	std::stringstream	ss(line);
 	std::string			instruction;
 
-	if (!line.find(" \t"))
-		return (line);
 	ss >> instruction;
 	return (instruction);
 }
@@ -50,7 +48,7 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 
 
 	std::size_t			found;
-	if ((found = line.find(")")) == std::string::npos)
+	if ((found = line.find(')')) == std::string::npos)
 		throw(AvmParser::InvalidInstruction(line + " -> is not a complet Instruction"));
 	instruction = line.substr(0, found + 1);
 
@@ -75,19 +73,26 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 AInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::string const &instruction)
 {
 	eInstructionType	einstruction;
+	std::size_t			found;
 
 	try
 	{
 		einstruction = AvmParser::einstructionByString.at(instruction);
 		if (einstruction == Assert || einstruction == Push)
 		{
-			std::size_t			found;
-			if ((found = line.find(")")) == std::string::npos)
+			if ((found = line.find(')')) == std::string::npos)
 				throw(AvmParser::InvalidInstruction(line + " -> is not a complet Instruction"));
 			return (this->_factoryInstruction.createInstruction(line.substr(0, found + 1), einstruction, this->_parseOperandInstruction(line)));
 		}
 		else
+		{
+			if (((found = line.find(' ')) == std::string::npos) &&
+				((found = line.find('\t')) == std::string::npos))
+				throw(AvmParser::InvalidInstruction(line + " -> is not a complet Instruction"));
+			if (!AvmParser::_isEmptyString(line.substr(found + 1)))
+				throw(AvmParser::InvalidInstruction(line.substr(found + 1) + " -> after instruction"));
 			return (this->_factoryInstruction.createInstruction(einstruction));
+		}
 	}
 	catch (std::out_of_range const &e)
 	{

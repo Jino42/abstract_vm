@@ -20,37 +20,37 @@ void					InstructionException::checkOverflow(eOperandType e, long double value)
 	if (e == Int8)
 	{
 		if (value > std::numeric_limits<char>::max())
-			throw(InstructionException::Overflow("Your Operation will make an Int8 Overflow"));
+			throw(InstructionException::Overflow("Your will make an Int8 Overflow"));
 		if (value < std::numeric_limits<char>::min())
-			throw(InstructionException::Underflow("Your Operation will make an Int8 Underflow"));
+			throw(InstructionException::Underflow("Your will make an Int8 Underflow"));
 	}
 	else if (e == Int16)
 	{
 		if (value > std::numeric_limits<short>::max())
-			throw(InstructionException::Overflow("Your Operation will make an Int16 Overflow"));
+			throw(InstructionException::Overflow("Your will make an Int16 Overflow"));
 		if (value < std::numeric_limits<short>::min())
-			throw(InstructionException::Underflow("Your Operation will make an Int16 Underflow"));
+			throw(InstructionException::Underflow("Your will make an Int16 Underflow"));
 	}
 	else if (e == Int32)
 	{
 		if (value > std::numeric_limits<int>::max())
-			throw(InstructionException::Overflow("Your Operation will make an Int32 Overflow"));
+			throw(InstructionException::Overflow("Your will make an Int32 Overflow"));
 		if (value < std::numeric_limits<int>::min())
-			throw(InstructionException::Underflow("Your Operation will make an Int32 Underflow"));
+			throw(InstructionException::Underflow("Your will make an Int32 Underflow"));
 	}
 	else if (e == Float)
 	{
 		if (value > std::numeric_limits<float>::max())
-			throw(InstructionException::Overflow("Your Operation will make an Float Overflow"));
+			throw(InstructionException::Overflow("Your will make an Float Overflow"));
 		if (value < -std::numeric_limits<float>::max())
-			throw(InstructionException::Underflow("Your Operation will make an Float Underflow"));
+			throw(InstructionException::Underflow("Your will make an Float Underflow"));
 	}
 	else if (e == Double)
 	{
 		if (value > std::numeric_limits<double>::max())
-			throw(InstructionException::Overflow("Your Operation will make an Double Overflow"));
+			throw(InstructionException::Overflow("Your will make an Double Overflow"));
 		if (value < -std::numeric_limits<double>::max())
-			throw(InstructionException::Underflow("Your Operation will make an Double Underflow"));
+			throw(InstructionException::Underflow("Your will make an Double Underflow"));
 	}
 }
 
