@@ -16,6 +16,7 @@ NcursesWin::NcursesWin(Vector2D<int> const &position, Vector2D<int> const &perce
 	this->_win = newwin(this->_winSize.getY(), this->_winSize.getX(), this->_position.getY(),
 			this->_position.getX());
 	box(this->_win, 0, 0);
+	refresh();
 	return ;
 }
 

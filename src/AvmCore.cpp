@@ -101,8 +101,11 @@ void	AvmCore::execute(void)
 
 	it = (this->_instruction).begin();
 
-	this->_ncurses->welcomeRender();
-	static_cast<void>(getch());
+	if (this->_ncurses)
+	{
+		this->_ncurses->welcomeRender();
+		this->_ncurses->update();
+	}
 
 	while (!this->_exit && it != (this->_instruction).end())
 	{
