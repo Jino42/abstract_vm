@@ -57,8 +57,13 @@ void NcursesWin::render(void)
 	wrefresh(this->_win);
 }
 
-void NcursesWin::printString(Vector2D<int> position, std::string const &string)
+void NcursesWin::printString(unsigned int index, std::string const &string)
 {
+	Vector2D<int> position(
+		(this->_winSize.getX() - string.length()) / 2,
+		this->_winSize.getY() - 3 - index);
+	if (position.getX() < 0)
+		position.setX(0);
 	if (this->_inWin(position))
 	{
     	mvwprintw(this->_win, position.getY() + this->_offset.getY(),

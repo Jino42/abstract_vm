@@ -21,7 +21,7 @@ public:
 	Vector2D<int>   getWinSize(void) const;
 	WINDOW			*getWin(void) const;
 
-	void        printString(Vector2D<int> position, std::string const &string);
+	void        printString(unsigned int index, std::string const &string);
 	void		update(void);
 	void		render(void);
 

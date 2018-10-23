@@ -10,18 +10,19 @@ int		main(int argc, char **argv)
 		if (argc == 2)
 		{
 			AvmCore core(argv[1],
+				//nullptr
 				new Ncurses()
 			);
-			core.printInstruction();
+			//core.printInstruction();
 			core.execute();
-			core.printStack();
+			//core.printStack();
 		}
 		else
 		{
 			AvmCore core(nullptr);
-			core.printInstruction();
+			//core.printInstruction();
 			core.execute();
-			core.printStack();
+			//core.printStack();
 		}
 	}
 	return (0);

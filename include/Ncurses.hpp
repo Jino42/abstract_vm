@@ -12,15 +12,21 @@ class Ncurses {
         bool            exit(void) const;
 
 
-		void		addInstruction(AInstruction const &instruction);
+		void		addInstruction(std::string const &str);
+		void		addException(std::string const &str);
 		void		render(MutantStack<IOperand const *> &stack);
         void        update(void);
 
+		typedef struct		s_printInstruction {
+			std::string		string;
+			bool			isException;
+		}					t_printInstruction;
+
     private:
-        bool						_exit;
-		std::vector<std::string>	_instruction;
-		NcursesWin					*_winInstruction;
-		NcursesWin					*_winStack;
+        bool							_exit;
+		std::vector<t_printInstruction>	_instruction;
+		NcursesWin						*_winInstruction;
+		NcursesWin						*_winStack;
 
 		void		_clearNcurses(void);
 		void        _renderInstruction(void);

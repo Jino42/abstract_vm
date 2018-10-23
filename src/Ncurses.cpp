@@ -62,9 +62,22 @@ void Ncurses::update(void)
 	this->_winStack->update();
 }
 
-void		Ncurses::addInstruction(AInstruction const &instruction)
+void		Ncurses::addException(std::string const &str)
 {
-	this->_instruction.push_back(instruction.toString());
+	t_printInstruction pi;
+
+	pi.string = str;
+	pi.isException = true;
+	this->_instruction.push_back(pi);
+}
+
+void		Ncurses::addInstruction(std::string const &str)
+{
+	t_printInstruction pi;
+
+	pi.string = str;
+	pi.isException = false;
+	this->_instruction.push_back(pi);
 }
 
 void Ncurses::render(MutantStack<IOperand const *> &stack)
@@ -76,12 +89,16 @@ void Ncurses::render(MutantStack<IOperand const *> &stack)
 void Ncurses::_renderInstruction(void)
 {
 	unsigned int j = 0;
-	std::vector<std::string>::iterator	it;
+	std::vector<t_printInstruction>::iterator	it;
 
 	it = this->_instruction.begin();
 	while (it != this->_instruction.end())
 	{
-		this->_winInstruction->printString(Vector2D<int>(0, j), *it);
+		if (it->isException)
+			wattron(this->_winInstruction->getWin(), COLOR_PAIR(1));
+		this->_winInstruction->printString(j, it->string);
+		if (it->isException)
+			wattroff(this->_winInstruction->getWin(), COLOR_PAIR(1));
 		it++;
 		j++;
 	}
@@ -96,7 +113,7 @@ void Ncurses::_renderStack(MutantStack<IOperand const *> &stack)
 	{
 		std::stringstream ss;
 		ss << std::fixed << std::setprecision((*it)->getPrecision()) << std::stof((*it)->toString());
-		this->_winStack->printString(Vector2D<int>(20, j), ss.str());
+		this->_winStack->printString(j, ss.str());
 		it++;
 		j++;
 	}

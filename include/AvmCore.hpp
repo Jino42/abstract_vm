@@ -30,7 +30,6 @@ public:
 
 	void	setExit(bool);
 
-	static void	_printError(std::string const &str);
 	void		printInstruction(void);
 	void		printStack(void);
 	void		execute(void);
@@ -42,6 +41,9 @@ private:
 	MutantStack< AInstruction const * >	_instruction;
 	MutantStack< IOperand const * >		_stack;
 	std::string const					_path;
+
+	void		_printError(std::string const &str);
+
 
 	AvmCore(AvmCore const &src);
 	AvmCore		&operator=(AvmCore const &rhs);

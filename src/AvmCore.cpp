@@ -89,7 +89,10 @@ void	AvmCore::printStack(void)
 }
 void	AvmCore::_printError(std::string const &str)
 {
-	std::cerr << str << std::endl;
+	if (this->_ncurses)
+		this->_ncurses->addException(str);
+	else
+		std::cerr << "\x1b[31m" << str << "\x1b[0m" << std::endl;
 }
 
 void	AvmCore::execute(void)
@@ -110,41 +113,51 @@ void	AvmCore::execute(void)
 		{
 			(*it)->execute(*this);
 			if (this->_ncurses)
-				this->_ncurses->addInstruction(**it);
+				this->_ncurses->addInstruction((*it)->toString());
 		}
 		catch (InstructionException::AssertFailed const &e)
 		{
-			AvmCore::_printError(std::string("InstructionException::AssertFailed : \x1b[31m") + e.what() + "\x1b[0m");
+			this->_printError(std::string("InstructionException::AssertFailed : ") + e.what());
 		}
 		catch (InstructionException::DivByZero const &e)
 		{
-			AvmCore::_printError(std::string("InstructionException::DivByZero : \x1b[31m") + e.what() + "\x1b[0m");
+			this->_printError(std::string("InstructionException::DivByZero : ") + e.what());
 		}
 		catch (InstructionException::StackTooSmall const &e)
 		{
-			AvmCore::_printError(std::string("InstructionException::StackTooSmall : \x1b[31m") + e.what() + "\x1b[0m");
+			this->_printError(std::string("InstructionException::StackTooSmall : ") + e.what());
 		}
 		catch (InstructionException::Underflow const &e)
 		{
-			AvmCore::_printError(std::string("InstructionException::Underflow : \x1b[31m") + e.what() + "\x1b[0m");
+			this->_printError(std::string("InstructionException::Underflow : ") + e.what());
 		}
 		catch (InstructionException::Overflow const &e)
 		{
-			AvmCore::_printError(std::string("InstructionException::Overflow : \x1b[31m") + e.what() + "\x1b[0m");
+			this->_printError(std::string("InstructionException::Overflow : ") + e.what());
 		}
 		catch (AvmCore::NoExitInstruction const &e)
 		{
-			AvmCore::_printError(std::string("AvmCore::NoExitInstruction: \x1b[31m") + e.what() + "\x1b[0m");
+			this->_printError(std::string("AvmCore::NoExitInstruction: ") + e.what());
 		}
 		catch (std::exception const &e)
 		{
-			AvmCore::_printError(std::string("std::exception : \x1b[31m") + e.what() + "\x1b[0m");
+			this->_printError(std::string("std::exception : ") + e.what());
 		}
 		it++;
 		i++;
 	}
 	if (!this->_exit)
 		throw(AvmCore::NoExitInstruction());
+	if (this->_ncurses)
+	{
+		this->_ncurses->addInstruction("Press ESC for exit");
+		this->_ncurses->render(this->_stack);
+		while (!this->_ncurses->exit())
+		{
+			this->_ncurses->update();
+			this->_ncurses->render(this->_stack);
+		}
+	}
 }
 
 const bool		AvmCore::_debug = 0;
