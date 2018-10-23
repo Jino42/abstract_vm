@@ -11,7 +11,16 @@ _path(path)
 {
 	if (AvmCore::_debug)
 		std::cout << "AvmCore:: Default constructor called." << std::endl;
-	this->_parser._parse(*this, this->_path);
+	try
+	{
+		this->_parser._parse(*this, this->_path);
+	}
+	catch (std::exception const &e)
+	{
+		if (ncurses)
+			delete ncurses;
+		throw;
+	}
 	return ;
 }
 AvmCore::AvmCore(Ncurses *ncurses) :
@@ -119,9 +128,9 @@ void	AvmCore::execute(void)
 	{
 		try
 		{
-			(*it)->execute(*this);
 			if (this->_ncurses)
 				this->_ncurses->addInstruction((*it)->toString());
+			(*it)->execute(*this);
 		}
 		catch (InstructionException::AssertFailed const &e)
 		{

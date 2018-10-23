@@ -42,14 +42,14 @@ void					InstructionException::checkOverflow(eOperandType e, long double value)
 	{
 		if (value > std::numeric_limits<float>::max())
 			throw(InstructionException::Overflow("Your Operation will make an Float Overflow"));
-		if (value < std::numeric_limits<float>::min())
+		if (value < -std::numeric_limits<float>::max())
 			throw(InstructionException::Underflow("Your Operation will make an Float Underflow"));
 	}
 	else if (e == Double)
 	{
 		if (value > std::numeric_limits<double>::max())
 			throw(InstructionException::Overflow("Your Operation will make an Double Overflow"));
-		if (value < std::numeric_limits<double>::min())
+		if (value < -std::numeric_limits<double>::max())
 			throw(InstructionException::Underflow("Your Operation will make an Double Underflow"));
 	}
 }
