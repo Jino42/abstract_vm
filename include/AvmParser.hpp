@@ -7,6 +7,8 @@
 #include "MutantStack.tpp"
 #include <regex>
 
+class AvmCore;
+
 class AvmParser {
 
 public:
@@ -26,8 +28,8 @@ public:
 	AvmParser(MutantStack< AInstruction const * > &instruction);
 	~AvmParser(void);
 
-	void					_parse(std::string const &);
-	void					_parse(void);
+	void					_parse(AvmCore &avmCore, std::string const &);
+	void					_parse(AvmCore &avmCore);
 	AInstruction const		*_parseInstruction(std::string const &line, std::string const &instruction);
 	IOperand const			*_parseOperandInstruction(std::string const &line);
 	static bool				_isEmptyString(std::string const &line);

@@ -6,6 +6,7 @@
 #include "FactoryOperand.hpp"
 #include <iomanip>
 #include "InstructionException.hpp"
+#include "AvmCore.hpp"
 
 AvmParser::AvmParser(MutantStack< AInstruction const * > &instruction) :
 _isValidInstruction(std::regex("([a-z]+)\\s+([a-z0-9]+)\\((-?([0-9]+)|([0-9]+\\.[0-9]+))\\)")),
@@ -98,7 +99,7 @@ AInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::s
 	}
 }
 
-void				AvmParser::_parse(std::string const &path)
+void				AvmParser::_parse(AvmCore &avmCore, std::string const &path)
 {
 	std::ifstream	ifs(path);
 	std::string		line;
@@ -115,21 +116,21 @@ void				AvmParser::_parse(std::string const &path)
 			}
 			catch (InstructionException::Underflow const &e)
 			{
-				std::cerr << "InstructionException::Underflow : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+				avmCore.printError(std::string("InstructionException::Underflow : ") + e.what());
 			}
 			catch (InstructionException::Overflow const &e)
 			{
-				std::cerr << "InstructionException::Overflow : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+				avmCore.printError(std::string("InstructionException::Overflow : ") + e.what());
 			}
 			catch (std::exception const &e)
 			{
-				std::cerr << "std::exception : \x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+				avmCore.printError(std::string("std::exception : ") + e.what());
 			}
 		}
 	}
 }
 
-void				AvmParser::_parse(void)
+void				AvmParser::_parse(AvmCore &avmCore)
 {
 	std::string		line;
 
@@ -143,11 +144,15 @@ void				AvmParser::_parse(void)
 			}
 			catch (InstructionException::Underflow const &e)
 			{
-				std::cerr << "\x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+				avmCore.printError(std::string("InstructionException::Underflow : ") + e.what());
+			}
+			catch (InstructionException::Overflow const &e)
+			{
+				avmCore.printError(std::string("InstructionException::Overflow : ") + e.what());
 			}
 			catch (std::exception const &e)
 			{
-				std::cerr << "\x1b[31m" << e.what() << "\x1b[0m" << std::endl;
+				avmCore.printError(std::string("std::exception : ") + e.what());
 			}
 		}
 	}

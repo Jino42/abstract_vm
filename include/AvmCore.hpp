@@ -33,6 +33,7 @@ public:
 	void		printInstruction(void);
 	void		printStack(void);
 	void		execute(void);
+	void		printError(std::string const &str);
 
 private:
 	Ncurses								*_ncurses;
@@ -42,7 +43,6 @@ private:
 	MutantStack< IOperand const * >		_stack;
 	std::string const					_path;
 
-	void		_printError(std::string const &str);
 
 
 	AvmCore(AvmCore const &src);

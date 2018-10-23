@@ -11,7 +11,7 @@ _path(path)
 {
 	if (AvmCore::_debug)
 		std::cout << "AvmCore:: Default constructor called." << std::endl;
-	this->_parser._parse(this->_path);
+	this->_parser._parse(*this, this->_path);
 	return ;
 }
 AvmCore::AvmCore(Ncurses *ncurses) :
@@ -21,7 +21,7 @@ _parser(this->_instruction)
 {
 	if (AvmCore::_debug)
 		std::cout << "AvmCore:: Default constructor called." << std::endl;
-	this->_parser._parse();
+	this->_parser._parse(*this);
 	return ;
 }
 
@@ -87,7 +87,7 @@ void	AvmCore::printStack(void)
 		i++;
 	}
 }
-void	AvmCore::_printError(std::string const &str)
+void	AvmCore::printError(std::string const &str)
 {
 	if (this->_ncurses)
 		this->_ncurses->addException(str);
@@ -117,31 +117,31 @@ void	AvmCore::execute(void)
 		}
 		catch (InstructionException::AssertFailed const &e)
 		{
-			this->_printError(std::string("InstructionException::AssertFailed : ") + e.what());
+			this->printError(std::string("InstructionException::AssertFailed : ") + e.what());
 		}
 		catch (InstructionException::DivByZero const &e)
 		{
-			this->_printError(std::string("InstructionException::DivByZero : ") + e.what());
+			this->printError(std::string("InstructionException::DivByZero : ") + e.what());
 		}
 		catch (InstructionException::StackTooSmall const &e)
 		{
-			this->_printError(std::string("InstructionException::StackTooSmall : ") + e.what());
+			this->printError(std::string("InstructionException::StackTooSmall : ") + e.what());
 		}
 		catch (InstructionException::Underflow const &e)
 		{
-			this->_printError(std::string("InstructionException::Underflow : ") + e.what());
+			this->printError(std::string("InstructionException::Underflow : ") + e.what());
 		}
 		catch (InstructionException::Overflow const &e)
 		{
-			this->_printError(std::string("InstructionException::Overflow : ") + e.what());
+			this->printError(std::string("InstructionException::Overflow : ") + e.what());
 		}
 		catch (AvmCore::NoExitInstruction const &e)
 		{
-			this->_printError(std::string("AvmCore::NoExitInstruction: ") + e.what());
+			this->printError(std::string("AvmCore::NoExitInstruction: ") + e.what());
 		}
 		catch (std::exception const &e)
 		{
-			this->_printError(std::string("std::exception : ") + e.what());
+			this->printError(std::string("std::exception : ") + e.what());
 		}
 		it++;
 		if (this->_ncurses)
