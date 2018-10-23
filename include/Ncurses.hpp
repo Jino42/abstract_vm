@@ -26,7 +26,7 @@ class Ncurses {
 
     private:
         bool							_exit;
-		std::vector<t_printInstruction>	_instruction;
+		std::deque<t_printInstruction>	_instruction;
 		NcursesWin						*_winInstruction;
 		NcursesWin						*_winStack;
 

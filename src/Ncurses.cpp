@@ -74,7 +74,7 @@ void		Ncurses::addException(std::string const &str)
 
 	pi.string = str;
 	pi.isException = true;
-	this->_instruction.push_back(pi);
+	this->_instruction.push_front(pi);
 }
 
 void		Ncurses::addInstruction(std::string const &str)
@@ -83,7 +83,7 @@ void		Ncurses::addInstruction(std::string const &str)
 
 	pi.string = str;
 	pi.isException = false;
-	this->_instruction.push_back(pi);
+	this->_instruction.push_front(pi);
 }
 
 
@@ -104,7 +104,7 @@ void Ncurses::render(MutantStack<IOperand const *> &stack)
 void Ncurses::_renderInstruction(void)
 {
 	unsigned int j = 0;
-	std::vector<t_printInstruction>::iterator	it;
+	std::deque<t_printInstruction>::iterator	it;
 
 	it = this->_instruction.begin();
 	while (it != this->_instruction.end())

@@ -154,6 +154,9 @@ void	AvmCore::execute(void)
 		throw(AvmCore::NoExitInstruction());
 	if (this->_ncurses)
 	{
+		this->_ncurses->addInstruction("");
+		this->_ncurses->addInstruction("");
+		this->_ncurses->addInstruction("");
 		this->_ncurses->addInstruction("Press ESC for exit");
 		this->_ncurses->render(this->_stack);
 		while (!this->_ncurses->exit())

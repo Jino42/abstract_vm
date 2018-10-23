@@ -7,7 +7,6 @@
 #include "MutantStack.tpp"
 #include "AInstruction.hpp"
 #include "IOperand.hpp"
-#include <vector>
 
 class NcursesWin {
 
