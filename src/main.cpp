@@ -9,7 +9,9 @@ int		main(int argc, char **argv)
 	{
 		if (argc == 2)
 		{
-			AvmCore core(argv[1],  new Ncurses(Vector2D<int>(0, 0), Vector2D<int>(50, 50)));
+			AvmCore core(argv[1],
+				new Ncurses()
+			);
 			core.printInstruction();
 			core.execute();
 			core.printStack();

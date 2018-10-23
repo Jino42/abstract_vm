@@ -40,7 +40,7 @@ private:
 	bool								_exit;
 	AvmParser							_parser;
 	MutantStack< AInstruction const * >	_instruction;
-	MutantStack< IOperand const * >			_stack;
+	MutantStack< IOperand const * >		_stack;
 	std::string const					_path;
 
 	AvmCore(AvmCore const &src);

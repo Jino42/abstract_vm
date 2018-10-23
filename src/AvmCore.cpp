@@ -103,12 +103,14 @@ void	AvmCore::execute(void)
 	{
 		if (this->_ncurses)
 		{
-			this->_ncurses->render(this->_instruction, this->_stack, i);
+			this->_ncurses->render(this->_stack);
 			this->_ncurses->update();
 		}
 		try
 		{
 			(*it)->execute(*this);
+			if (this->_ncurses)
+				this->_ncurses->addInstruction(**it);
 		}
 		catch (InstructionException::AssertFailed const &e)
 		{

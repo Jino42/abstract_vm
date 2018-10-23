@@ -24,6 +24,7 @@ AInstruction.hpp \
 FactoryInstruction.hpp \
 AvmParser.hpp \
 Ncurses.hpp \
+NcursesWin.hpp \
 Vector2D.tpp \
 instruction/InstructionAdd.hpp \
 instruction/InstructionDiv.hpp \
@@ -54,6 +55,7 @@ AInstruction.cpp \
 AvmCore.cpp \
 AvmParser.cpp \
 FactoryInstruction.cpp \
+NcursesWin.cpp \
 Ncurses.cpp \
 instruction/InstructionAdd.cpp \
 instruction/InstructionDiv.cpp \
