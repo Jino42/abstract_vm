@@ -97,18 +97,15 @@ void	AvmCore::_printError(std::string const &str)
 
 void	AvmCore::execute(void)
 {
-	unsigned int								i;
 	MutantStack<AInstruction const *>::iterator	it;
 
 	it = (this->_instruction).begin();
-	i = 0;
+
+	this->_ncurses->welcomeRender();
+	static_cast<void>(getch());
+
 	while (!this->_exit && it != (this->_instruction).end())
 	{
-		if (this->_ncurses)
-		{
-			this->_ncurses->render(this->_stack);
-			this->_ncurses->update();
-		}
 		try
 		{
 			(*it)->execute(*this);
@@ -144,7 +141,11 @@ void	AvmCore::execute(void)
 			this->_printError(std::string("std::exception : ") + e.what());
 		}
 		it++;
-		i++;
+		if (this->_ncurses)
+		{
+			this->_ncurses->render(this->_stack);
+			this->_ncurses->update();
+		}
 	}
 	if (!this->_exit)
 		throw(AvmCore::NoExitInstruction());

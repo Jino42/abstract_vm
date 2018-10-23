@@ -50,6 +50,12 @@ void Ncurses::_clearNcurses(void)
 	endwin();
 }
 
+void Ncurses::firstUpdate(void)
+{
+	this->_winInstruction->update();
+	this->_winStack->update();
+}
+
 void Ncurses::update(void)
 {
     int key;
@@ -78,6 +84,15 @@ void		Ncurses::addInstruction(std::string const &str)
 	pi.string = str;
 	pi.isException = false;
 	this->_instruction.push_back(pi);
+}
+
+
+void Ncurses::welcomeRender(void)
+{
+	this->_winStack->welcomeRender();
+	this->_winInstruction->welcomeRender();
+	this->_winStack->render();
+	this->_winInstruction->render();
 }
 
 void Ncurses::render(MutantStack<IOperand const *> &stack)

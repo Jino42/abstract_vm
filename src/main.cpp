@@ -6,6 +6,7 @@
 
 int		main(int argc, char **argv)
 {
+	try
 	{
 		if (argc == 2)
 		{
@@ -24,6 +25,10 @@ int		main(int argc, char **argv)
 			core.execute();
 			//core.printStack();
 		}
+	}
+	catch (std::exception const &e)
+	{
+		std::cerr << "Error: " << e.what() << std::endl;
 	}
 	return (0);
 }

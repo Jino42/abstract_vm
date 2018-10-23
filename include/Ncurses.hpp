@@ -15,6 +15,8 @@ class Ncurses {
 		void		addInstruction(std::string const &str);
 		void		addException(std::string const &str);
 		void		render(MutantStack<IOperand const *> &stack);
+		void		welcomeRender(void);
+		void		firstUpdate(void);
         void        update(void);
 
 		typedef struct		s_printInstruction {

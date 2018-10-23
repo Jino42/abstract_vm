@@ -57,6 +57,13 @@ void NcursesWin::render(void)
 	wrefresh(this->_win);
 }
 
+void NcursesWin::welcomeRender(void)
+{
+	this->printString(LINES / 2, "Press something for start");
+	box(this->_win, 0, 0);
+	wrefresh(this->_win);
+}
+
 void NcursesWin::printString(unsigned int index, std::string const &string)
 {
 	Vector2D<int> position(

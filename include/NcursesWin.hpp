@@ -24,6 +24,7 @@ public:
 	void        printString(unsigned int index, std::string const &string);
 	void		update(void);
 	void		render(void);
+	void		welcomeRender(void);
 
 private:
 
