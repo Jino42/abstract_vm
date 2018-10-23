@@ -34,6 +34,7 @@ public:
 	void		printStack(void);
 	void		execute(void);
 	void		printError(std::string const &str);
+	void		printInstruction(char c);
 
 private:
 	Ncurses								*_ncurses;

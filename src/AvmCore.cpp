@@ -95,6 +95,14 @@ void	AvmCore::printError(std::string const &str)
 		std::cerr << "\x1b[31m" << str << "\x1b[0m" << std::endl;
 }
 
+void	AvmCore::printInstruction(char c)
+{
+	if (this->_ncurses)
+		this->_ncurses->addInstruction(std::string(1, c));
+	else
+		std::cout << c;
+}
+
 void	AvmCore::execute(void)
 {
 	MutantStack<AInstruction const *>::iterator	it;

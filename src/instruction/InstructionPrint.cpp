@@ -33,7 +33,8 @@ void					InstructionPrint::execute(AvmCore &avm) const
 	if (v1->getType() != Int8)
 		throw(InstructionException::AssertFailed("Print failed : [Type is not printable]"));
 	c = std::stoi(v1->toString());
-	std::cout << c;
+
+	avm.printInstruction(c);
 }
 
 const bool		InstructionPrint::_debug = 0;
