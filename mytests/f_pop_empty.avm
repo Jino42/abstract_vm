@@ -1,0 +1,7 @@
+push int8(0)
+pop
+pop
+push int8(0)
+push int8(0)
+sub
+exit

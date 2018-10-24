@@ -1,0 +1,18 @@
+push int8(20)
+push int8(0)
+mod
+
+push int8(20)
+push int8(0)
+div
+
+
+push float(20.2);
+push float(0.0);
+mod;
+
+push float(20.2);
+push float(0.0);
+	  div;
+
+  	exit;

@@ -27,15 +27,15 @@ AvmParser::~AvmParser(void)
 
 std::string			AvmParser::_removeFirstBlank(std::string const &line)
 {
-	std::string newline(line);
+	std::string	newline(line);
+	unsigned	i;
 
-	for(std::string::iterator it = newline.begin(); it != newline.end(); ++it)
+	for(i = 0; i < newline.length(); i++)
 	{
-    	if (*it == '\t' || *it == ' ')
-			newline.erase(it);
-		else
-			return (newline);
+    	if (newline[i] != '\t' && newline[i] != ' ')
+			break ;
 	}
+	newline = newline.substr(i);
 	return (newline);
 }
 
@@ -49,7 +49,7 @@ std::string			AvmParser::_getInstructionFromString(std::string const &line)
 {
 	std::cmatch			cm;
 
-	std::regex_match(line.c_str(), cm, std::regex("^([a-z]+).*"));
+	std::regex_match(line.c_str(), cm, std::regex("^\\s*([a-z]+).*"));
 	if (!cm.size())
 		return ("");
 	return (std::string(cm[cm.size() - 1]));
