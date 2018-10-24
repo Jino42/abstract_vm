@@ -7,7 +7,7 @@ EXE= avm
 #=======COMPILER AND FLAGS======#
 
 CXX= clang++
-CXXFLAGS= -Wall -Wextra -Werror -Wvla -std=c++11 -fsanitize=address -g3 -MMD
+CXXFLAGS= -Wall -Wextra -Werror -Wvla -std=c++11 -g3 -MMD
 NCURSES= -L ~/.brew/lib/ -lncurses
 #============HEADERS============#
 
