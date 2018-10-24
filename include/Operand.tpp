@@ -12,7 +12,7 @@ class Operand : public IOperand {
 
 public:
 
-	Operand(eOperandType e, double value, int precision);
+	Operand(eOperandType e, long double value, int precision);
 	Operand(Operand<T> const &src);
 	~Operand(void) { }
 
@@ -36,13 +36,13 @@ private:
 	Operand				&operator=(Operand const &rhs);
 	Operand(void);
 
-	static IOperand const	*_returnOperand(IOperand const &lhs, IOperand const &rhs, double value);
+	static IOperand const	*_returnOperand(IOperand const &lhs, IOperand const &rhs, long double value);
 
 	static const bool	_debug;
 };
 
 template <typename T>
-Operand<T>::Operand(eOperandType e, double value, int precision) :
+Operand<T>::Operand(eOperandType e, long double value, int precision) :
 	_eOperandType(e),
 	_value(value),
 	_stringValue(std::to_string(this->_value)),
@@ -80,25 +80,25 @@ eOperandType		Operand<T>::getType(void) const
 template <typename T>
 IOperand const *Operand<T>::operator*(IOperand const &rhs) const
 {
-	double value;
+	long double value;
 
-	value = static_cast<double>(this->_value) * static_cast<double>(stod(rhs.toString()));
+	value = static_cast<long double>(this->_value) * static_cast<double>(stold(rhs.toString()));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 template <typename T>
 IOperand const *Operand<T>::operator/(IOperand const &rhs) const
 {
-	double value;
+	long double value;
 
-	value = static_cast<double>(this->_value) / static_cast<double>(stod(rhs.toString()));
+	value = static_cast<long double>(this->_value) / static_cast<double>(stold(rhs.toString()));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 template <typename T>
 IOperand const *Operand<T>::operator-(IOperand const &rhs) const
 {
-	double value;
+	long double value;
 
-	value = static_cast<double>(this->_value) - static_cast<double>(stod(rhs.toString()));
+	value = static_cast<long double>(this->_value) - static_cast<double>(stold(rhs.toString()));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 template <typename T>
@@ -106,22 +106,22 @@ IOperand const *Operand<T>::operator+(IOperand const &rhs) const
 {
 	std::stringstream ss;
 
-	double value;
+	long double value;
 
-	value = static_cast<double>(this->_value) + static_cast<double>(stod(rhs.toString()));
+	value = static_cast<long double>(this->_value) + static_cast<double>(stold(rhs.toString()));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 template <typename T>
 IOperand const *Operand<T>::operator%(IOperand const &rhs) const
 {
-	double value;
+	long double value;
 
-	value = std::fmod(static_cast<double>(this->_value), static_cast<double>(stod(rhs.toString())));
+	value = std::fmod(static_cast<long double>(this->_value), static_cast<double>(stold(rhs.toString())));
 	return (Operand<T>::_returnOperand(*this, rhs, value));
 }
 
 template <typename T>
-IOperand const *Operand<T>::_returnOperand(IOperand const &lhs, IOperand const &rhs, double value)
+IOperand const *Operand<T>::_returnOperand(IOperand const &lhs, IOperand const &rhs, long double value)
 {
 	return (FactoryOperand::getInstance()->createOperand(
 					std::max(lhs.getType(), rhs.getType()),

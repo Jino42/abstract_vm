@@ -9,7 +9,7 @@
 #include "AvmCore.hpp"
 
 AvmParser::AvmParser(MutantStack< AInstruction const * > &instruction) :
-_isValidInstruction(std::regex("([a-z]+)\\s+([a-z0-9]+)\\((-?([0-9]+)|([0-9]+\\.[0-9]+))\\)")),
+_isValidInstruction(std::regex("([a-z]+)\\s+([a-z0-9]+)\\((-?([0-9]+)|(-?[0-9]+\\.[0-9]+))\\)")),
 
 _instruction(instruction)
 {
@@ -25,6 +25,20 @@ AvmParser::~AvmParser(void)
 	return ;
 }
 
+std::string			AvmParser::_removeFirstBlank(std::string const &line)
+{
+	std::string newline(line);
+
+	for(std::string::iterator it = newline.begin(); it != newline.end(); ++it)
+	{
+    	if (*it == '\t' || *it == ' ')
+			newline.erase(it);
+		else
+			return (newline);
+	}
+	return (newline);
+}
+
 bool				AvmParser::_isEmptyString(std::string const &line)
 {
 	if (line.empty() || std::regex_match(line.c_str(), std::regex("^(\\s*;).*")))
@@ -33,14 +47,15 @@ bool				AvmParser::_isEmptyString(std::string const &line)
 }
 std::string			AvmParser::_getInstructionFromString(std::string const &line)
 {
-	std::stringstream	ss(line);
-	std::string			instruction;
+	std::cmatch			cm;
 
-	ss >> instruction;
-	return (instruction);
+	std::regex_match(line.c_str(), cm, std::regex("^([a-z]+).*"));
+	if (!cm.size())
+		return ("");
+	return (std::string(cm[cm.size() - 1]));
 }
 
-IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
+IOperand const		*AvmParser::_parseOperandArgInstruction(std::string const &line)
 {
 	eOperandType		eoperand;
 	std::cmatch			cm;
@@ -62,10 +77,10 @@ IOperand const		*AvmParser::_parseOperandInstruction(std::string const &line)
 
 	eoperand = AvmParser::eoperandByString.at(cm[2]);
 	if ((eoperand == Float || eoperand == Double)
-		&& !std::regex_match(std::string(cm[3]), std::regex("([0-9]+\\.[0-9]+)")))
+		&& !std::regex_match(std::string(cm[3]), std::regex("^(-?[0-9]+\\.[0-9]+)$")))
 		throw(AvmParser::InvalidInstruction(instruction + " -> is not a complet Instruction"));
 	if ((eoperand != Float && eoperand != Double)
-		&& !std::regex_match(std::string(cm[3]), std::regex("^([0-9]+)$")))
+		&& !std::regex_match(std::string(cm[3]), std::regex("^(-?[0-9]+)$")))
 		throw(AvmParser::InvalidInstruction(instruction + " -> is not a complet Instruction"));
 	return (FactoryOperand::getInstance()->createOperand(eoperand, cm[3], FactoryOperand::getStringPrecision(cm[3])));
 }
@@ -82,14 +97,13 @@ AInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::s
 		{
 			if ((found = line.find(')')) == std::string::npos)
 				throw(AvmParser::InvalidInstruction(line + " -> is not a complet Instruction"));
-			return (this->_factoryInstruction.createInstruction(line.substr(0, found + 1), einstruction, this->_parseOperandInstruction(line)));
+			return (this->_factoryInstruction.createInstruction(line.substr(0, found + 1), einstruction, this->_parseOperandArgInstruction(line)));
 		}
 		else
 		{
-			if (((found = line.find(' ')) == std::string::npos) &&
-				((found = line.find('\t')) == std::string::npos))
-				throw(AvmParser::InvalidInstruction(line + " -> is not a complet Instruction"));
-			if (!AvmParser::_isEmptyString(line.substr(found + 1)))
+			if ((!((found = line.find('\t')) == std::string::npos) ||
+					!((found = line.find(' ')) == std::string::npos))
+				&& !AvmParser::_isEmptyString(line.substr(found + 1)))
 				throw(AvmParser::InvalidInstruction(line.substr(found + 1) + " -> after instruction"));
 			return (this->_factoryInstruction.createInstruction(einstruction));
 		}
@@ -104,6 +118,30 @@ AInstruction const	*AvmParser::_parseInstruction(std::string const &line, std::s
 	}
 }
 
+void				AvmParser::_parseTryGetInstruction(AvmCore &avmCore, std::string &line)
+{
+	line = AvmParser::_removeFirstBlank(line);
+	if (!AvmParser::_isEmptyString(line))
+	{
+		try
+		{
+			this->_instruction.push(this->_parseInstruction(line, AvmParser::_getInstructionFromString(line)));
+		}
+		catch (InstructionException::Underflow const &e)
+		{
+			avmCore.printError(std::string("InstructionException::Underflow : ") + e.what());
+		}
+		catch (InstructionException::Overflow const &e)
+		{
+			avmCore.printError(std::string("InstructionException::Overflow : ") + e.what());
+		}
+		catch (std::exception const &e)
+		{
+			avmCore.printError(std::string("std::exception : ") + e.what());
+		}
+	}
+}
+
 void				AvmParser::_parse(AvmCore &avmCore, std::string const &path)
 {
 	std::ifstream	ifs(path);
@@ -113,25 +151,7 @@ void				AvmParser::_parse(AvmCore &avmCore, std::string const &path)
 		throw(std::invalid_argument("Cannot open your file"));
 	while (getline(ifs, line))
 	{
-		if (!AvmParser::_isEmptyString(line))
-		{
-			try
-			{
-				this->_instruction.push(this->_parseInstruction(line, AvmParser::_getInstructionFromString(line)));
-			}
-			catch (InstructionException::Underflow const &e)
-			{
-				avmCore.printError(std::string("InstructionException::Underflow : ") + e.what());
-			}
-			catch (InstructionException::Overflow const &e)
-			{
-				avmCore.printError(std::string("InstructionException::Overflow : ") + e.what());
-			}
-			catch (std::exception const &e)
-			{
-				avmCore.printError(std::string("std::exception : ") + e.what());
-			}
-		}
+		this->_parseTryGetInstruction(avmCore, line);
 	}
 }
 
@@ -140,27 +160,7 @@ void				AvmParser::_parse(AvmCore &avmCore)
 	std::string		line;
 
 	while (getline(std::cin, line) && line != ";;")
-	{
-		if (!AvmParser::_isEmptyString(line))
-		{
-			try
-			{
-				this->_instruction.push(this->_parseInstruction(line, AvmParser::_getInstructionFromString(line)));
-			}
-			catch (InstructionException::Underflow const &e)
-			{
-				avmCore.printError(std::string("InstructionException::Underflow : ") + e.what());
-			}
-			catch (InstructionException::Overflow const &e)
-			{
-				avmCore.printError(std::string("InstructionException::Overflow : ") + e.what());
-			}
-			catch (std::exception const &e)
-			{
-				avmCore.printError(std::string("std::exception : ") + e.what());
-			}
-		}
-	}
+		this->_parseTryGetInstruction(avmCore, line);
 }
 
 const bool		AvmParser::_debug = 0;

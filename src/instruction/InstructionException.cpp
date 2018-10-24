@@ -20,37 +20,37 @@ void					InstructionException::checkOverflow(eOperandType e, long double value)
 	if (e == Int8)
 	{
 		if (value > std::numeric_limits<char>::max())
-			throw(InstructionException::Overflow("Your will make an Int8 Overflow"));
+			throw(InstructionException::Overflow("You will make an Int8 Overflow"));
 		if (value < std::numeric_limits<char>::min())
-			throw(InstructionException::Underflow("Your will make an Int8 Underflow"));
+			throw(InstructionException::Underflow("You will make an Int8 Underflow"));
 	}
 	else if (e == Int16)
 	{
 		if (value > std::numeric_limits<short>::max())
-			throw(InstructionException::Overflow("Your will make an Int16 Overflow"));
+			throw(InstructionException::Overflow("You will make an Int16 Overflow"));
 		if (value < std::numeric_limits<short>::min())
-			throw(InstructionException::Underflow("Your will make an Int16 Underflow"));
+			throw(InstructionException::Underflow("You will make an Int16 Underflow"));
 	}
 	else if (e == Int32)
 	{
 		if (value > std::numeric_limits<int>::max())
-			throw(InstructionException::Overflow("Your will make an Int32 Overflow"));
+			throw(InstructionException::Overflow("You will make an Int32 Overflow"));
 		if (value < std::numeric_limits<int>::min())
-			throw(InstructionException::Underflow("Your will make an Int32 Underflow"));
+			throw(InstructionException::Underflow("You will make an Int32 Underflow"));
 	}
 	else if (e == Float)
 	{
 		if (value > std::numeric_limits<float>::max())
-			throw(InstructionException::Overflow("Your will make an Float Overflow"));
+			throw(InstructionException::Overflow("You will make an Float Overflow"));
 		if (value < -std::numeric_limits<float>::max())
-			throw(InstructionException::Underflow("Your will make an Float Underflow"));
+			throw(InstructionException::Underflow("You will make an Float Underflow"));
 	}
 	else if (e == Double)
 	{
 		if (value > std::numeric_limits<double>::max())
-			throw(InstructionException::Overflow("Your will make an Double Overflow"));
+			throw(InstructionException::Overflow("You will make an Double Overflow"));
 		if (value < -std::numeric_limits<double>::max())
-			throw(InstructionException::Underflow("Your will make an Double Underflow"));
+			throw(InstructionException::Underflow("You will make an Double Underflow"));
 	}
 }
 
@@ -97,6 +97,20 @@ InstructionException::StackTooSmall::StackTooSmall(InstructionException::StackTo
 	_error(src._error)
 	{ this->_error = src._error; }
 const char	*InstructionException::StackTooSmall::what() const throw()
+	{ return (this->_error.c_str()); }
+
+InstructionException::ModByZero::~ModByZero(void) throw(){}
+InstructionException::ModByZero::ModByZero(void) throw() :
+	domain_error(this->_error),
+	_error("Trying Modulo by 0") {}
+InstructionException::ModByZero::ModByZero(std::string s) throw() :
+	domain_error(s),
+	_error(s) { }
+InstructionException::ModByZero::ModByZero(InstructionException::ModByZero const &src) throw() :
+	domain_error(this->_error),
+	_error(src._error)
+	{ this->_error = src._error; }
+const char	*InstructionException::ModByZero::what() const throw()
 	{ return (this->_error.c_str()); }
 
 InstructionException::DivByZero::~DivByZero(void) throw(){}

@@ -26,27 +26,27 @@ IOperand const		*FactoryOperand::createOperand(eOperandType type, std::string co
 IOperand const		*FactoryOperand::_createInt8(std::string const &value, int precision) const
 {
 	InstructionException::checkOverflow(Int8, std::stold(value));
-	return (new Operand<int8_t>(Int8, std::stod(value), precision));
+	return (new Operand<int8_t>(Int8, std::stold(value), precision));
 }
 IOperand const		*FactoryOperand::_createInt16(std::string const &value, int precision) const
 {
 	InstructionException::checkOverflow(Int16, std::stold(value));
-	return (new Operand<int16_t>(Int16, std::stod(value), precision));
+	return (new Operand<int16_t>(Int16, std::stold(value), precision));
 }
 IOperand const		*FactoryOperand::_createInt32(std::string const &value, int precision) const
 {
 	InstructionException::checkOverflow(Int32, std::stold(value));
-	return (new Operand<int32_t>(Int32, std::stod(value), precision));
+	return (new Operand<int32_t>(Int32, std::stold(value), precision));
 }
 IOperand const		*FactoryOperand::_createFloat(std::string const &value, int precision) const
 {
 	InstructionException::checkOverflow(Float, std::stold(value));
-	return (new Operand<float>(Float, std::stod(value), precision));
+	return (new Operand<float>(Float, std::stold(value), precision));
 }
 IOperand const		*FactoryOperand::_createDouble(std::string const &value, int precision) const
 {
 	InstructionException::checkOverflow(Double, std::stold(value));
-	return (new Operand<double>(Double, std::stod(value), precision));
+	return (new Operand<double>(Double, std::stold(value), precision));
 }
 
 

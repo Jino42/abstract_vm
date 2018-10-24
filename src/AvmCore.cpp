@@ -92,7 +92,7 @@ void	AvmCore::printStack(void)
 	i = (this->_stack).begin();
 	while (i != (this->_stack).end())
 	{
-		std::cout << std::fixed << std::setprecision((*i)->getPrecision()) << std::stof((*i)->toString()) << std::endl;
+		std::cout << std::fixed << std::setprecision((*i)->getPrecision()) << std::stod((*i)->toString()) << std::endl;
 		i++;
 	}
 }
@@ -139,6 +139,10 @@ void	AvmCore::execute(void)
 		catch (InstructionException::DivByZero const &e)
 		{
 			this->printError(std::string("InstructionException::DivByZero : ") + e.what());
+		}
+		catch (InstructionException::ModByZero const &e)
+		{
+			this->printError(std::string("InstructionException::ModByZero : ") + e.what());
 		}
 		catch (InstructionException::StackTooSmall const &e)
 		{

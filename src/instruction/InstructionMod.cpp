@@ -32,6 +32,8 @@ void					InstructionMod::execute(AvmCore &avm) const
 	IOperand const *v2 = avm.getStack().top();
 	avm.getStack().pop();
 
+	if (std::stod(v1->toString()) == 0.0)
+		throw(InstructionException::ModByZero());
 	avm.getStack().push(*v2 % *v1);
 	delete v1;
 	delete v2;

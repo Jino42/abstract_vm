@@ -127,7 +127,7 @@ void Ncurses::_renderStack(MutantStack<IOperand const *> &stack)
 	while (it != (stack).end())
 	{
 		std::stringstream ss;
-		ss << std::fixed << std::setprecision((*it)->getPrecision()) << std::stof((*it)->toString());
+		ss << std::fixed << std::setprecision((*it)->getPrecision()) << std::stod((*it)->toString());
 		this->_winStack->printString(j, ss.str());
 		it++;
 		j++;

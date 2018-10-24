@@ -30,10 +30,6 @@ public:
 
 	void					_parse(AvmCore &avmCore, std::string const &);
 	void					_parse(AvmCore &avmCore);
-	AInstruction const		*_parseInstruction(std::string const &line, std::string const &instruction);
-	IOperand const			*_parseOperandInstruction(std::string const &line);
-	static bool				_isEmptyString(std::string const &line);
-	static std::string		_getInstructionFromString(std::string const &line);
 
 	static std::map<std::string, eInstructionType>			einstructionByString;
 	static std::map<eInstructionType, std::string>			stringByEinstruction;
@@ -43,6 +39,14 @@ private:
 	std::regex							_isValidInstruction;
 	MutantStack< AInstruction const * >	&_instruction;
 	FactoryInstruction const			_factoryInstruction;
+
+
+	void					_parseTryGetInstruction(AvmCore &avmCore, std::string &line);
+	AInstruction const		*_parseInstruction(std::string const &line, std::string const &instruction);
+	IOperand const			*_parseOperandArgInstruction(std::string const &line);
+	static bool				_isEmptyString(std::string const &line);
+	static std::string		_getInstructionFromString(std::string const &line);
+	static std::string 		_removeFirstBlank(std::string const &line);
 
 	AvmParser(void);
 	AvmParser(AvmParser const &src);

@@ -56,6 +56,18 @@ public:
 		std::string			_error;
 	};
 
+	class ModByZero : public std::domain_error {
+	public:
+		ModByZero(void) throw();
+		ModByZero(std::string) throw();
+		virtual const char* what() const throw();
+		~ModByZero(void) throw();
+		ModByZero(ModByZero const &src) throw();
+	private:
+		ModByZero &operator=(ModByZero const &rhs) throw();
+		std::string			_error;
+	};
+
 	class DivByZero : public std::domain_error {
 	public:
 		DivByZero(void) throw();
